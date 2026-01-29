@@ -60,57 +60,54 @@ const MedicineLog = () => {
 
     return (
         <PageTransition className="min-h-screen px-4 py-8 max-w-md mx-auto pb-28">
-            {/* Header with Depth */}
-            <div className="flex items-start justify-between mb-8">
-                <div>
+            {/* Sticky Glass Header */}
+            <div className="sticky top-0 z-40 -mx-4 px-4 pt-8 pb-4 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl border-b border-slate-200/50 dark:border-slate-800/50 shadow-sm transition-all duration-300">
+                <div className="flex items-start justify-between mb-6">
+                    <div>
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">Medicine Log</h1>
+                            <p className="text-slate-500 dark:text-slate-400 font-medium text-sm">Track your health journey</p>
+                        </motion.div>
+                    </div>
                     <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.3 }}
+                        className="bg-gradient-to-br from-teal-500 to-teal-700 shadow-lg shadow-teal-500/30 p-2.5 rounded-xl text-white"
                     >
-                        <h1 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">Medicine Log</h1>
-                        <p className="text-slate-500 dark:text-slate-400 font-medium">Track your health journey</p>
+                        <History size={20} />
                     </motion.div>
                 </div>
-                <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.3 }}
-                    className="bg-gradient-to-br from-teal-500 to-teal-700 shadow-lg shadow-teal-500/30 p-3 rounded-2xl text-white"
-                >
-                    <History size={24} />
-                </motion.div>
-            </div>
 
-            {/* Search & Filter - Floating Glass */}
-            <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="flex gap-3 mb-8 sticky top-24 z-30"
-            >
-                <div className="relative flex-1 group">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 transition-colors group-focus-within:text-teal-600" size={20} />
-                    <input
-                        type="text"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search medicines..."
-                        className="w-full pl-12 pr-10 py-3.5 rounded-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white/20 dark:border-slate-700 shadow-glass focus:outline-none focus:ring-2 focus:ring-teal-500/30 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 transition-all font-medium"
-                    />
-                    {searchQuery && (
-                        <button
-                            onClick={() => setSearchQuery('')}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
-                        >
-                            <X size={16} />
-                        </button>
-                    )}
+                {/* Search Bar */}
+                <div className="flex gap-3">
+                    <div className="relative flex-1 group">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 transition-colors group-focus-within:text-teal-600" size={18} />
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search medicines..."
+                            className="w-full pl-11 pr-10 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500/30 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 transition-all font-medium text-sm shadow-sm"
+                        />
+                        {searchQuery && (
+                            <button
+                                onClick={() => setSearchQuery('')}
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                            >
+                                <X size={14} />
+                            </button>
+                        )}
+                    </div>
+                    <button className="bg-white dark:bg-slate-900 p-3 rounded-xl text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:scale-95 shadow-sm">
+                        <Filter size={18} />
+                    </button>
                 </div>
-                <button className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl p-3.5 rounded-2xl text-slate-500 dark:text-slate-400 border border-white/20 dark:border-slate-700 shadow-glass hover:bg-white dark:hover:bg-slate-800 transition-all active:scale-95">
-                    <Filter size={20} />
-                </button>
-            </motion.div>
+            </div>
 
             {/* Content Area */}
             <div className="space-y-8">

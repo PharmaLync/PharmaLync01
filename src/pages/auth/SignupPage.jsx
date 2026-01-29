@@ -148,6 +148,19 @@ const SignupPage = () => {
                                     />
                                 </div>
 
+                                <div className="space-y-2">
+                                    <label className="text-xs font-semibold text-slate-500 uppercase ml-1">Profile Photo</label>
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-14 h-14 rounded-full bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center text-slate-400">
+                                            <User size={24} />
+                                        </div>
+                                        <input
+                                            type="file"
+                                            className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-teal-50 file:text-teal-700 hover:file:bg-teal-100"
+                                        />
+                                    </div>
+                                </div>
+
                                 {selectedRole !== 'pharmacist' ? (
                                     <div className="space-y-2">
                                         <label className="text-xs font-semibold text-slate-500 uppercase ml-1">Government ID (Aadhaar/Driver's License)</label>

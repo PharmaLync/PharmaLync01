@@ -28,8 +28,8 @@ const DigitalIdentityCard = () => {
                     {/* Header */}
                     <div className="flex justify-between items-start z-10">
                         <div className="flex items-center gap-2">
-                            <div className="bg-white/20 p-1.5 rounded-lg backdrop-blur-sm">
-                                <ShieldCheck size={20} className="text-white" />
+                            <div className="bg-white/20 p-1 rounded-lg backdrop-blur-sm">
+                                <Logo variant="icon-only" size="xs" className="text-white" />
                             </div>
                             <span className="font-semibold tracking-wide text-sm opacity-90">PharmaLync ID</span>
                         </div>

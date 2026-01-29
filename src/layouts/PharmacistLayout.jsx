@@ -37,7 +37,7 @@ const PharmacistLayout = () => {
             </main>
 
             {/* Bottom Navigation */}
-            <nav className="bg-white border-t border-slate-200 fixed bottom-0 w-full z-50 pb-safe">
+            <div className="bg-white border-t border-slate-200 fixed bottom-0 w-full z-50 pb-safe px-6 py-2">
                 <div className="flex justify-around items-center h-16">
                     {tabs.map((tab) => {
                         const Icon = tab.icon;
@@ -47,15 +47,19 @@ const PharmacistLayout = () => {
                             <NavLink
                                 key={tab.path}
                                 to={tab.path}
-                                className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors ${isActive ? 'text-teal-600' : 'text-slate-400 hover:text-slate-600'}`}
+                                className="flex flex-col items-center gap-1 min-w-[64px]"
                             >
-                                <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-                                <span className="text-[10px] font-medium">{tab.label}</span>
+                                <div className={`p-2 rounded-xl transition-all duration-300 ${isActive ? 'bg-teal-50 text-teal-700 translate-y-[-4px] shadow-sm' : 'text-slate-400 hover:bg-slate-50'}`}>
+                                    <Icon size={24} strokeWidth={isActive ? 2.5 : 2} />
+                                </div>
+                                <span className={`text-[10px] font-medium transition-colors ${isActive ? 'text-teal-700' : 'text-slate-400'}`}>
+                                    {tab.label}
+                                </span>
                             </NavLink>
                         );
                     })}
                 </div>
-            </nav>
+            </div>
         </div>
     );
 };

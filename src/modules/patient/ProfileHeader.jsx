@@ -215,7 +215,10 @@ const ProfileHeader = () => {
                                         <div className="h-px bg-slate-100 dark:bg-slate-800 my-1" />
 
                                         {/* Sign Out (Placeholder) */}
-                                        <button className="w-full text-left px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-3">
+                                        <button
+                                            onClick={() => window.location.href = '/login'}
+                                            className="w-full text-left px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-3 text-red-500 hover:text-red-600 hover:bg-red-50"
+                                        >
                                             <LogOut size={16} />
                                             Sign Out
                                         </button>
