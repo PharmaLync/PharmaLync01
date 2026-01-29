@@ -56,24 +56,25 @@ const PatientDashboard = () => {
 
             <ProfileHeader />
 
-            <main className="px-6 pt-12 space-y-10 max-w-md mx-auto relative z-10">
+            <main className="px-5 pt-8 space-y-8 max-w-md mx-auto relative z-10">
 
                 {/* Greeting Section */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     style={{ opacity: headerOpacity, y: headerY }}
-                    className="flex justify-between items-end mb-4"
+                    className="flex justify-between items-end mb-2"
                 >
-                    <div className="space-y-1">
-                        <div className="flex items-center gap-2 mb-2 opacity-60 hover:opacity-100 transition-opacity">
+                    <div>
+                        <div className="flex items-center gap-2 mb-1">
                             {timeIcon}
-                            <span className="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                            <span className="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">
                                 {new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'short' })}
                             </span>
                         </div>
-                        <h1 className="text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
-                            {greeting}, <span className="text-slate-500 dark:text-slate-400 font-normal">Harish</span>
+                        <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-slate-300 tracking-tight leading-tight">
+                            {greeting},<br />
+                            <span className="text-teal-600 dark:text-teal-400">Harish</span>
                         </h1>
                     </div>
                 </motion.div>
@@ -83,18 +84,18 @@ const PatientDashboard = () => {
                     initial={{ scale: 0.95, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.2 }}
-                    className="shadow-2xl shadow-teal-900/5 rounded-3xl"
                 >
                     <DigitalIdentityCard />
                 </motion.div>
 
                 {/* Reminders Section */}
-                <div className="pt-2">
-                    <div className="flex items-center justify-between mb-6 px-1">
-                        <h3 className="text-base font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                <div>
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                            <Sparkles size={16} className="text-teal-500" />
                             Today's Plan
                         </h3>
-                        <span className="text-[10px] font-bold tracking-wide text-slate-400 uppercase bg-slate-50 dark:bg-slate-800/50 px-3 py-1.5 rounded-full border border-slate-100 dark:border-slate-800">
+                        <span className="text-xs font-medium text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-full">
                             3 Pending
                         </span>
                     </div>
