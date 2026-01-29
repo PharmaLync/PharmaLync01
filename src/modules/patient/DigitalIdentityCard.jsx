@@ -20,7 +20,7 @@ const DigitalIdentityCard = () => {
                 style={{ transformStyle: "preserve-3d" }}
             >
                 {/* Front Face */}
-                <div className="absolute inset-0 backface-hidden rounded-2xl overflow-hidden shadow-xl card-gradient text-white p-6 flex flex-col justify-between">
+                <div className="absolute inset-0 backface-hidden rounded-2xl overflow-hidden shadow-xl card-gradient text-white p-6 flex flex-col justify-between border border-transparent dark:border-white/10">
                     {/* Background Deco */}
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 blur-2xl" />
                     <div className="absolute bottom-0 left-0 w-24 h-24 bg-teal-900/10 rounded-full -ml-5 -mb-5" />
@@ -56,7 +56,7 @@ const DigitalIdentityCard = () => {
                         <Button
                             variant="glass"
                             size="sm"
-                            className="w-full justify-center gap-2 text-xs h-8 border-white/20 bg-white/10 hover:bg-white/20"
+                            className="w-full justify-center gap-2 text-xs h-8 border-white/20 bg-white/10 hover:bg-white/20 text-white"
                         >
                             <QrCode size={14} />
                             Tap to Reveal QR
@@ -66,15 +66,15 @@ const DigitalIdentityCard = () => {
 
                 {/* Back Face */}
                 <div
-                    className="absolute inset-0 backface-hidden rounded-2xl overflow-hidden shadow-xl bg-white p-6 flex flex-col items-center justify-center rotate-y-180"
+                    className="absolute inset-0 backface-hidden rounded-2xl overflow-hidden shadow-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 p-6 flex flex-col items-center justify-center rotate-y-180"
                     style={{ transform: "rotateY(180deg)", backfaceVisibility: "hidden" }}
                 >
-                    <h3 className="text-teal-900 font-bold mb-4">Patient QR Code</h3>
-                    <div className="bg-white p-2 rounded-xl border-2 border-teal-100 shadow-inner">
+                    <h3 className="text-teal-900 dark:text-teal-400 font-bold mb-4">Patient QR Code</h3>
+                    <div className="bg-white p-2 rounded-xl border-2 border-teal-100 dark:border-teal-900 shadow-inner">
                         {/* Mock QR */}
                         <QrCode size={120} className="text-teal-900" />
                     </div>
-                    <p className="mt-4 text-xs text-slate-400 text-center">Scan this code at any PharmaLync partner clinic or pharmacy.</p>
+                    <p className="mt-4 text-xs text-slate-400 dark:text-slate-500 text-center">Scan this code at any PharmaLync partner clinic or pharmacy.</p>
                 </div>
             </motion.div>
         </div>

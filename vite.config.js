@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
 // https://vitejs.dev/config/
+// Forcing restart to pick up tailwind.config.js
 export default defineConfig({
   plugins: [
     react(),
