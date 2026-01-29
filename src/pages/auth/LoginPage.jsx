@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { User, Stethoscope, Store, ShieldCheck, ArrowRight } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { api } from '@/lib/api';
@@ -171,7 +171,7 @@ const LoginPage = () => {
 
             {step === 'role' && (
                 <p className="text-center mt-6 text-sm text-slate-400">
-                    Don't have an account? <a href="#" className="text-teal-600 font-semibold hover:underline">Sign up</a>
+                    Don't have an account? <Link to="/signup" className="text-teal-600 font-semibold hover:underline">Sign up</Link>
                 </p>
             )}
 

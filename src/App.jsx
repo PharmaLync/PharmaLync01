@@ -10,6 +10,7 @@ import PharmacistLayout from './layouts/PharmacistLayout';
 
 // Pages
 import LoginPage from './pages/auth/LoginPage';
+import SignupPage from './pages/auth/SignupPage';
 
 // Modules (Now acting as Dashboard Pages)
 import PatientDashboard from './modules/patient';
@@ -42,6 +43,7 @@ function App() {
                     {/* Public Routes */}
                     <Route element={<AuthLayout />}>
                         <Route path="/login" element={<LoginPage />} />
+                        <Route path="/signup" element={<SignupPage />} />
                         <Route path="/" element={<Navigate to="/login" replace />} />
                     </Route>
 
