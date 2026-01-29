@@ -22,17 +22,16 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     const handleLogin = () => {
-        if (selectedRole === 'patient') {
+        if (selectedRole === 'patient' || selectedRole === 'doctor') {
             if (!identifier) {
-                alert("Please enter Mobile Number or Aadhaar");
+                alert(selectedRole === 'patient' ? "Please enter Mobile Number or Aadhaar" : "Please enter Mobile Number or License ID");
                 return;
             }
             // Simulate OTP sent
             setStep('otp');
         } else {
-            // Direct login for demo for other roles
+            // Direct login for demo for pharmacist
             const routes = {
-                doctor: '/doctor/dashboard',
                 pharmacist: '/pharmacist/scan'
             };
             navigate(routes[selectedRole]);
@@ -41,7 +40,17 @@ const LoginPage = () => {
 
     const verifyOtp = () => {
         if (otp === '123456') { // Mock OTP
-            navigate('/patient/dashboard');
+            if (selectedRole === 'patient') {
+                navigate('/patient/dashboard');
+            } else if (selectedRole === 'doctor') {
+                // Mock logic: If identifier is 'new', go to register, else dashboard
+                // For demo simplicity, let's say '9999999999' is a new doctor
+                if (identifier === '9999999999') {
+                    navigate('/doctor/register');
+                } else {
+                    navigate('/doctor/dashboard');
+                }
+            }
         } else {
             alert('Invalid OTP. Use 123456');
         }
@@ -65,7 +74,7 @@ const LoginPage = () => {
                     </CardTitle>
                     <CardDescription className="text-center">
                         {step === 'otp'
-                            ? `Enter the OTP sent to +91 ${identifier}`
+                            ? `Enter the OTP sent to registered mobile`
                             : 'Select your role to continue'}
                     </CardDescription>
                 </CardHeader>
@@ -105,14 +114,18 @@ const LoginPage = () => {
                         {step === 'role' ? (
                             <div className="space-y-2">
                                 <label className="text-xs font-semibold text-slate-500 uppercase ml-1">
-                                    {selectedRole === 'patient' ? 'Mobile Number or Aadhaar' : 'License ID'}
+                                    {selectedRole === 'patient' ? 'Mobile / Aadhaar' : selectedRole === 'doctor' ? 'Mobile / License ID' : 'License ID'}
                                 </label>
                                 <input
                                     type="text"
                                     value={identifier}
                                     onChange={(e) => setIdentifier(e.target.value)}
                                     className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-all font-medium text-slate-900"
-                                    placeholder={selectedRole === 'patient' ? 'Enter Mobile / Aadhaar' : 'LIC-8821-X'}
+                                    placeholder={
+                                        selectedRole === 'patient' ? 'Enter Mobile / Aadhaar'
+                                            : selectedRole === 'doctor' ? 'Enter Mobile / License ID'
+                                                : 'LIC-8821-X'
+                                    }
                                 />
                             </div>
                         ) : (
@@ -144,7 +157,7 @@ const LoginPage = () => {
                             onClick={handleLogin}
                             className="w-full h-12 text-base font-semibold shadow-xl shadow-teal-900/20 hover:scale-[1.02] transition-transform"
                         >
-                            {selectedRole === 'patient' ? 'Get OTP' : 'Sign In'} <ArrowRight className="ml-2" size={18} />
+                            {selectedRole === 'pharmacist' ? 'Sign In' : 'Get OTP'} <ArrowRight className="ml-2" size={18} />
                         </Button>
                     ) : (
                         <Button

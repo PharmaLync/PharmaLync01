@@ -18,6 +18,13 @@ import MedicineLog from './modules/patient/MedicineLog';
 import PrescriptionsPage from './modules/patient/pages/PrescriptionsPage';
 
 import DoctorDashboard from './modules/doctor';
+import DoctorRegistration from './modules/doctor/pages/DoctorRegistration';
+import ScanQRPage from './modules/doctor/pages/ScanQRPage';
+import PatientDetailsPage from './modules/doctor/pages/PatientDetailsPage';
+import DiagnosisPage from './modules/doctor/pages/DiagnosisPage';
+import DraftPrescriptionPage from './modules/doctor/pages/DraftPrescriptionPage';
+import ActivityLogPage from './modules/doctor/pages/ActivityLogPage';
+import DoctorProfilePage from './modules/doctor/pages/DoctorProfilePage';
 import PharmacistDashboard from './modules/pharmacist';
 
 // Pharmacist Pages
@@ -47,8 +54,15 @@ function App() {
                     </Route>
 
                     {/* Doctor Routes */}
+                    <Route path="/doctor/register" element={<DoctorRegistration />} />
                     <Route element={<DoctorLayout />}>
-                        <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
+                        <Route path="/doctor/dashboard" element={<Navigate to="/doctor/scan" replace />} />
+                        <Route path="/doctor/scan" element={<ScanQRPage />} />
+                        <Route path="/doctor/patient/:id" element={<PatientDetailsPage />} />
+                        <Route path="/doctor/diagnose/:id" element={<DiagnosisPage />} />
+                        <Route path="/doctor/prescription/:id" element={<DraftPrescriptionPage />} />
+                        <Route path="/doctor/activity" element={<ActivityLogPage />} />
+                        <Route path="/doctor/profile" element={<DoctorProfilePage />} />
                     </Route>
 
                     {/* Pharmacist Routes */}
