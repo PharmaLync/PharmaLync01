@@ -5,54 +5,99 @@ import { User, Stethoscope, Store, ShieldCheck, ArrowRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { api } from '@/lib/api';
+import { useAuthStore } from '@/lib/authStore';
+import Logo from '@/components/ui/Logo';
 
 const roles = [
-    { id: 'patient', label: 'Patient', icon: User, color: 'text-teal-600', bg: 'bg-teal-50' },
-    { id: 'doctor', label: 'Doctor', icon: Stethoscope, color: 'text-blue-600', bg: 'bg-blue-50' },
-    { id: 'pharmacist', label: 'Pharmacist', icon: Store, color: 'text-orange-600', bg: 'bg-orange-50' },
+    { id: 'patient', label: 'Patient', icon: User, color: 'text-teal-600', bg: 'bg-teal-50', backendRole: 'PATIENT' },
+    { id: 'doctor', label: 'Doctor', icon: Stethoscope, color: 'text-blue-600', bg: 'bg-blue-50', backendRole: 'ADMIN' }, // MVP: Admin acts as Doctor
+    { id: 'pharmacist', label: 'Pharmacist', icon: Store, color: 'text-orange-600', bg: 'bg-orange-50', backendRole: 'PHARMACY' },
 ];
-
-import Logo from '@/components/ui/Logo';
 
 const LoginPage = () => {
     const [selectedRole, setSelectedRole] = useState('patient');
     const [step, setStep] = useState('role'); // 'role' | 'otp'
     const [identifier, setIdentifier] = useState('');
     const [otp, setOtp] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const setAuth = useAuthStore(state => state.setAuth);
 
-    const handleLogin = () => {
-        if (selectedRole === 'patient' || selectedRole === 'doctor') {
-            if (!identifier) {
-                alert(selectedRole === 'patient' ? "Please enter Mobile Number or Aadhaar" : "Please enter Mobile Number or License ID");
-                return;
-            }
-            // Simulate OTP sent
-            setStep('otp');
-        } else {
-            // Direct login for demo for pharmacist
-            const routes = {
-                pharmacist: '/pharmacist/scan'
-            };
-            navigate(routes[selectedRole]);
+    const handleLogin = async () => {
+        if (!identifier) {
+<<<<<<< Updated upstream
+            alert(selectedRole === 'patient' ? "Please enter Mobile Number or Aadhaar" : "Please enter Mobile Number or License ID");
+=======
+            alert("Please enter your ID / Mobile");
+>>>>>>> Stashed changes
+            return;
         }
-    };
 
-    const verifyOtp = () => {
-        if (otp === '123456') { // Mock OTP
+        setIsLoading(true);
+        try {
             if (selectedRole === 'patient') {
-                navigate('/patient/dashboard');
+                // In a real system, this would trigger an OTP
+                setStep('otp');
+<<<<<<< Updated upstream
             } else if (selectedRole === 'doctor') {
-                // Mock logic: If identifier is 'new', go to register, else dashboard
-                // For demo simplicity, let's say '9999999999' is a new doctor
+                // Mock logic: If identifier is '9999999999' is a new doctor (demo from upstream)
                 if (identifier === '9999999999') {
                     navigate('/doctor/register');
                 } else {
+                    const response = await api.auth.login(identifier, 'Password123!');
+                    setAuth(response.user, response.accessToken);
                     navigate('/doctor/dashboard');
                 }
+            } else {
+                // Pharmacist / others
+                const response = await api.auth.login(identifier, 'Password123!');
+                setAuth(response.user, response.accessToken);
+                navigate('/pharmacist/scan');
+=======
+            } else {
+                // Direct login for Pharmacy/Doctor/Admin for MVP
+                // Note: In production, password would be used instead of just License ID
+                const response = await api.auth.login(identifier, 'Password123!'); // Mock password
+                setAuth(response.user, response.accessToken);
+
+                const routes = {
+                    doctor: '/doctor/dashboard',
+                    pharmacist: '/pharmacist/scan'
+                };
+                navigate(routes[selectedRole]);
+>>>>>>> Stashed changes
             }
-        } else {
-            alert('Invalid OTP. Use 123456');
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const verifyOtp = async () => {
+        setIsLoading(true);
+        try {
+<<<<<<< Updated upstream
+            if (otp === '123456') {
+=======
+            // For MVP, we simulate OTP verification that calls a mock auth
+            if (otp === '123456') {
+                // Mock backend call for patient login
+>>>>>>> Stashed changes
+                const response = {
+                    user: { id: 'p-1', role: 'PATIENT', email: identifier },
+                    accessToken: 'mock-token'
+                };
+                setAuth(response.user, response.accessToken);
+                navigate('/patient/dashboard');
+            } else {
+                throw new Error('Invalid OTP. Use 123456');
+            }
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -155,16 +200,18 @@ const LoginPage = () => {
                     {step === 'role' ? (
                         <Button
                             onClick={handleLogin}
+                            disabled={isLoading}
                             className="w-full h-12 text-base font-semibold shadow-xl shadow-teal-900/20 hover:scale-[1.02] transition-transform"
                         >
-                            {selectedRole === 'pharmacist' ? 'Sign In' : 'Get OTP'} <ArrowRight className="ml-2" size={18} />
+                            {isLoading ? 'Processing...' : (selectedRole === 'patient' ? 'Get OTP' : 'Sign In')} <ArrowRight className="ml-2" size={18} />
                         </Button>
                     ) : (
                         <Button
                             onClick={verifyOtp}
+                            disabled={isLoading}
                             className="w-full h-12 text-base font-semibold shadow-xl shadow-teal-900/20 hover:scale-[1.02] transition-transform bg-teal-700 hover:bg-teal-800"
                         >
-                            Verify & Login <ShieldCheck className="ml-2" size={18} />
+                            {isLoading ? 'Verifying...' : 'Verify & Login'} <ShieldCheck className="ml-2" size={18} />
                         </Button>
                     )}
                 </CardFooter>

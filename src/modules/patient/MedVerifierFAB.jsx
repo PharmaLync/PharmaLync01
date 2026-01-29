@@ -5,22 +5,46 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
+import { api } from '@/lib/api';
+
 const MedVerifierFAB = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [scanStep, setScanStep] = useState('camera'); // camera | result
+    const [scanStep, setScanStep] = useState('camera'); // camera | result | error
+    const [scanResult, setScanResult] = useState(null);
+    const [errorMsg, setErrorMsg] = useState('');
 
     const handleScanClick = () => {
         setIsOpen(true);
         setScanStep('camera');
-        // Simulate scan delay
+
+        // In a real mobile app, this would open the camera bridge.
+        // For this demo, we use a prompt to simulate a QR scan.
         setTimeout(() => {
+            const token = prompt("Scan Result (Enter Secure QR Token):", "Paste-Secure-Token-Here");
+            if (token) {
+                verifyScan(token);
+            } else {
+                closeScanner();
+            }
+        }, 500);
+    };
+
+    const verifyScan = async (token) => {
+        try {
+            const result = await api.medicines.verifyQr(token);
+            setScanResult(result.medicine);
             setScanStep('result');
-        }, 2000);
+        } catch (error) {
+            setErrorMsg(error.message);
+            setScanStep('error');
+        }
     };
 
     const closeScanner = () => {
         setIsOpen(false);
         setScanStep('camera');
+        setScanResult(null);
+        setErrorMsg('');
     };
 
     return (
@@ -58,7 +82,6 @@ const MedVerifierFAB = () => {
                             >
                                 <div className="absolute inset-0 flex items-center justify-center">
                                     <div className="w-64 h-64 border-2 border-white/50 rounded-2xl relative">
-                                        {/* Scanning Line Animation */}
                                         <motion.div
                                             animate={{ top: ['0%', '100%', '0%'] }}
                                             transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
@@ -72,7 +95,7 @@ const MedVerifierFAB = () => {
                             </motion.div>
                         )}
 
-                        {scanStep === 'result' && (
+                        {scanStep === 'result' && scanResult && (
                             <motion.div
                                 initial={{ scale: 0.8, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
@@ -91,7 +114,7 @@ const MedVerifierFAB = () => {
                                         </motion.div>
 
                                         <h2 className="text-xl font-bold text-teal-900 dark:text-teal-100 mb-1">Authentic Medicine</h2>
-                                        <p className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-6">Verified by PharmaLync Ledger</p>
+                                        <Badge variant="outline" className="mb-6 bg-green-50 text-green-700 border-green-200">Verified by Blockchain</Badge>
 
                                         <div className="w-full bg-slate-50 dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 flex flex-col gap-3">
                                             <div className="flex items-center gap-3">
@@ -99,25 +122,38 @@ const MedVerifierFAB = () => {
                                                     <Pill size={20} />
                                                 </div>
                                                 <div>
-                                                    <h4 className="font-semibold text-slate-900 dark:text-slate-100">Dolo 650mg</h4>
-                                                    <p className="text-xs text-slate-500 dark:text-slate-400">Batch #8922A • Exp: Dec 2026</p>
+                                                    <h4 className="font-semibold text-slate-900 dark:text-slate-100">{scanResult.name}</h4>
+                                                    <p className="text-xs text-slate-500 dark:text-slate-400">Batch: {scanResult.batchNumber}</p>
                                                 </div>
                                             </div>
 
                                             <div className="h-px w-full bg-slate-200 dark:bg-slate-700" />
 
                                             <div className="flex justify-between items-center text-sm">
-                                                <span className="text-slate-500 dark:text-slate-400">Schedule</span>
-                                                <div className="flex gap-2">
-                                                    <span className="px-2 py-0.5 rounded bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 text-xs font-medium flex items-center gap-1">
-                                                        <Clock size={10} /> After Food
-                                                    </span>
-                                                </div>
+                                                <span className="text-slate-500 dark:text-slate-400">Status</span>
+                                                <Badge className="bg-teal-600">Original Twin</Badge>
                                             </div>
                                         </div>
 
                                         <Button className="w-full mt-6 bg-slate-900 dark:bg-teal-600 text-white hover:dark:bg-teal-700" onClick={closeScanner}>Done</Button>
                                     </div>
+                                </Card>
+                            </motion.div>
+                        )}
+
+                        {scanStep === 'error' && (
+                            <motion.div
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="w-full max-w-sm"
+                            >
+                                <Card className="border-red-500/50 bg-white/95 dark:bg-red-950/20 backdrop-blur-xl shadow-2xl p-6 flex flex-col items-center">
+                                    <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 text-red-600 rounded-full flex items-center justify-center mb-4">
+                                        <X size={32} />
+                                    </div>
+                                    <h2 className="text-xl font-bold text-red-900 dark:text-red-100 mb-2 text-center">Security Violation</h2>
+                                    <p className="text-sm text-red-600 dark:text-red-400 text-center mb-6">{errorMsg}</p>
+                                    <Button variant="destructive" className="w-full" onClick={closeScanner}>Dismiss Alert</Button>
                                 </Card>
                             </motion.div>
                         )}
