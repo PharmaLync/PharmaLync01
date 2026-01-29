@@ -109,11 +109,11 @@ const ScanQR = () => {
                         <div className={`bg-slate-100 p-8 rounded-full mb-8 ${isLoading ? 'animate-spin' : 'animate-pulse'}`}>
                             <QrCode size={64} className="text-teal-600" />
                         </div>
-                        <h2 className="text-2xl font-bold text-slate-800 mb-2">
-                            {isLoading ? 'Verifying...' : 'Ready to Scan'}
+                        <h2 className="text-2xl font-bold text-slate-900 mb-2 tracking-tight">
+                            {isLoading ? 'Verifying...' : 'Scan Prescription'}
                         </h2>
-                        <p className="text-slate-500 mb-8 max-w-xs">
-                            Scan a patient's digital health card or prescription QR code to proceed.
+                        <p className="text-slate-500 mb-8 max-w-xs text-sm">
+                            Align the QR code within the frame to verify.
                         </p>
 
                         {errorMsg && (

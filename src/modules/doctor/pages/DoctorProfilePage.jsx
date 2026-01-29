@@ -44,9 +44,9 @@ const DoctorProfilePage = () => {
                         <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Doctor" alt="Doc" className="w-full h-full rounded-full bg-slate-100" />
                     </div>
                     <div>
-                        <h2 className="text-lg font-bold">Dr. Sharma</h2>
-                        <p className="text-teal-100 text-sm">General Physician</p>
-                        <p className="text-teal-200 text-xs mt-1">Apollo Gleneagles</p>
+                        <h2 className="text-xl font-bold text-white tracking-tight">Dr. Sharma</h2>
+                        <p className="text-teal-100/80 text-sm font-medium">General Physician</p>
+                        <p className="text-teal-200/60 text-xs mt-1">Apollo Gleneagles</p>
                     </div>
                 </div>
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 blur-2xl" />
