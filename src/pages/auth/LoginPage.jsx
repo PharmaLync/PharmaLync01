@@ -5,21 +5,24 @@ import { User, Stethoscope, Store, ShieldCheck, ArrowRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { api } from '@/lib/api';
+import { useAuthStore } from '@/lib/authStore';
+import Logo from '@/components/ui/Logo';
 
 const roles = [
-    { id: 'patient', label: 'Patient', icon: User, color: 'text-teal-600', bg: 'bg-teal-50' },
-    { id: 'doctor', label: 'Doctor', icon: Stethoscope, color: 'text-blue-600', bg: 'bg-blue-50' },
-    { id: 'pharmacist', label: 'Pharmacist', icon: Store, color: 'text-orange-600', bg: 'bg-orange-50' },
+    { id: 'patient', label: 'Patient', icon: User, color: 'text-teal-600', bg: 'bg-teal-50', backendRole: 'PATIENT' },
+    { id: 'doctor', label: 'Doctor', icon: Stethoscope, color: 'text-blue-600', bg: 'bg-blue-50', backendRole: 'ADMIN' }, // MVP: Admin acts as Doctor
+    { id: 'pharmacist', label: 'Pharmacist', icon: Store, color: 'text-orange-600', bg: 'bg-orange-50', backendRole: 'PHARMACY' },
 ];
-
-import Logo from '@/components/ui/Logo';
 
 const LoginPage = () => {
     const [selectedRole, setSelectedRole] = useState('patient');
     const [step, setStep] = useState('role'); // 'role' | 'otp'
     const [identifier, setIdentifier] = useState('');
     const [otp, setOtp] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const setAuth = useAuthStore(state => state.setAuth);
 
     const handleLogin = () => {
         if (!identifier) {
@@ -149,16 +152,18 @@ const LoginPage = () => {
                     {step === 'role' ? (
                         <Button
                             onClick={handleLogin}
+                            disabled={isLoading}
                             className="w-full h-12 text-base font-semibold shadow-xl shadow-teal-900/20 hover:scale-[1.02] transition-transform"
                         >
-                            {selectedRole === 'pharmacist' ? 'Sign In' : 'Get OTP'} <ArrowRight className="ml-2" size={18} />
+                            {isLoading ? 'Processing...' : (selectedRole === 'patient' ? 'Get OTP' : 'Sign In')} <ArrowRight className="ml-2" size={18} />
                         </Button>
                     ) : (
                         <Button
                             onClick={verifyOtp}
+                            disabled={isLoading}
                             className="w-full h-12 text-base font-semibold shadow-xl shadow-teal-900/20 hover:scale-[1.02] transition-transform bg-teal-700 hover:bg-teal-800"
                         >
-                            Verify & Login <ShieldCheck className="ml-2" size={18} />
+                            {isLoading ? 'Verifying...' : 'Verify & Login'} <ShieldCheck className="ml-2" size={18} />
                         </Button>
                     )}
                 </CardFooter>
