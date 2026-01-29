@@ -24,56 +24,32 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const setAuth = useAuthStore(state => state.setAuth);
 
-    const handleLogin = async () => {
+    const handleLogin = () => {
         if (!identifier) {
-            alert(selectedRole === 'patient' ? "Please enter Mobile Number or Aadhaar" : "Please enter Mobile Number or License ID");
+            if (selectedRole === 'patient') alert("Please enter Mobile Number or Aadhaar");
+            else alert("Please enter License ID or Mobile Number");
             return;
         }
+        // Simulate OTP sent for all roles
+        setStep('otp');
+    };
 
-        setIsLoading(true);
-        try {
+    const verifyOtp = () => {
+        if (otp === '123456') { // Mock OTP
             if (selectedRole === 'patient') {
-                // In a real system, this would trigger an OTP
-                setStep('otp');
+                navigate('/patient/dashboard');
             } else if (selectedRole === 'doctor') {
-                // Mock logic: If identifier is '9999999999' is a new doctor (demo from upstream)
+                // Mock logic for doctor registration check
                 if (identifier === '9999999999') {
                     navigate('/doctor/register');
                 } else {
-                    const response = await api.auth.login(identifier, 'Password123!');
-                    setAuth(response.user, response.accessToken);
                     navigate('/doctor/dashboard');
                 }
-            } else {
-                // Pharmacist / others
-                const response = await api.auth.login(identifier, 'Password123!');
-                setAuth(response.user, response.accessToken);
+            } else if (selectedRole === 'pharmacist') {
                 navigate('/pharmacist/scan');
             }
-        } catch (error) {
-            alert(error.message);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const verifyOtp = async () => {
-        setIsLoading(true);
-        try {
-            if (otp === '123456') {
-                const response = {
-                    user: { id: 'p-1', role: 'PATIENT', email: identifier },
-                    accessToken: 'mock-token'
-                };
-                setAuth(response.user, response.accessToken);
-                navigate('/patient/dashboard');
-            } else {
-                throw new Error('Invalid OTP. Use 123456');
-            }
-        } catch (error) {
-            alert(error.message);
-        } finally {
-            setIsLoading(false);
+        } else {
+            alert('Invalid OTP. Use 123456');
         }
     };
 
