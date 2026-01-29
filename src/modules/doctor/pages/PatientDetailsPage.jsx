@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
-import { User, Droplets, AlertCircle, FileText, ChevronRight, Stethoscope, Clock, ShieldCheck, ChevronDown } from 'lucide-react';
+import { User, Droplets, AlertCircle, FileText, ChevronRight, Stethoscope, Clock, ShieldCheck, ChevronDown, CheckCircle2 } from 'lucide-react';
 import PageTransition from '@/components/ui/PageTransition';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
@@ -11,30 +11,43 @@ const PatientDetailsPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    // Mock Patient Data
+    // Mock Patient Data - AUTHENTIC STRUCTURE
     const patient = {
         name: "Rahul Deshmukh",
         age: 34,
         bloodGroup: "O+",
         img: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rahul",
-        allergies: ["Penicillin", "Peanuts"],
-        conditions: ["Hypertension"],
+
+        // Medical Summary
+        summary: {
+            allergies: ["Penicillin", "Peanuts", "Dust Mites"],
+            chronicConditions: ["Hypertension (Stage 1)"],
+            pastConditions: ["Typhoid (2018)", "Fractured Radius (2020)"]
+        },
+
+        // History
         history: [
             {
-                id: 1,
+                id: 101,
                 date: "15 Jan 2024",
                 doctor: "Dr. Sharma",
                 speciality: "General Physician",
+                hospital: "Apollo Gleneagles",
                 diagnosis: "Viral Fever",
-                medicines: ["Dolo 650 (3 days)", "Cetirizine (5 days)"]
+                medicines: ["Dolo 650", "Cetirizine 10mg"],
+                status: "Completed",
+                isSelf: true // Prescribed by current doctor
             },
             {
-                id: 2,
-                date: "10 Nov 2023",
-                doctor: "Dr. Anjali",
+                id: 102,
+                date: "22 Dec 2023",
+                doctor: "Dr. Anjali Gupta",
                 speciality: "Pulmonologist",
-                diagnosis: "Asthma Checkup",
-                medicines: ["Montelukast"]
+                hospital: "Fortis Hospital",
+                diagnosis: "Acute Bronchitis",
+                medicines: ["Montelukast", "Levolin Inhaler"],
+                status: "Active",
+                isSelf: false
             }
         ]
     };
@@ -42,86 +55,112 @@ const PatientDetailsPage = () => {
     return (
         <PageTransition className="px-4 py-6 pb-32 space-y-6">
 
-            {/* Professional Header */}
-            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex items-start gap-5">
-                <div className="w-20 h-20 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
+            {/* Overview Section */}
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm flex items-start gap-4">
+                <div className="w-20 h-20 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-100">
                     <img src={patient.img} alt={patient.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="flex-1">
                     <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-1">{patient.name}</h1>
-                    <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400 mb-3">
-                        <span>34 Years</span>
+                    <div className="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400 mb-2">
+                        <span>34 Yrs</span>
                         <span className="w-1 h-1 bg-slate-400 rounded-full" />
                         <span>Male</span>
                     </div>
-                    <Badge variant="secondary" className="bg-teal-50 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400 border-0">
-                        {patient.bloodGroup} Blood Group
-                    </Badge>
-                </div>
-            </div>
-
-            {/* Medical Summary in clear section */}
-            <div className="grid grid-cols-2 gap-4">
-                <div className="bg-orange-50 dark:bg-orange-950/20 border border-orange-100 dark:border-orange-900/40 p-4 rounded-xl">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-orange-700 dark:text-orange-400 mb-2 flex items-center gap-2">
-                        <AlertCircle size={14} /> Allergies
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                        {patient.allergies.map(a => (
-                            <span key={a} className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                                {a}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-                <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-100 dark:border-blue-900/40 p-4 rounded-xl">
-                    <h3 className="text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400 mb-2 flex items-center gap-2">
-                        <FileText size={14} /> Conditions
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                        {patient.conditions.map(c => (
-                            <span key={c} className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                                {c}
-                            </span>
-                        ))}
+                    <div className="flex gap-2">
+                        <Badge variant="secondary" className="bg-red-50 text-red-700 border-red-100">
+                            {patient.bloodGroup}
+                        </Badge>
+                        <Badge variant="outline" className="text-slate-500">
+                            ID: {id}
+                        </Badge>
                     </div>
                 </div>
             </div>
 
-            {/* Primary Action - Clear & Bold */}
-            <Button
-                onClick={() => navigate(`/doctor/diagnose/${id}`)}
-                className="w-full h-14 text-lg font-bold bg-slate-900 dark:bg-white dark:text-slate-900 text-white rounded-xl shadow-lg hover:bg-slate-800 transition-colors flex items-center justify-center gap-2"
-            >
-                <Stethoscope size={20} /> Start Diagnosis
-            </Button>
+            {/* Medical Summary Section */}
+            <div className="space-y-3">
+                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Medical Summary</h3>
 
-            {/* Patient History with Expandable Prescriptions */}
-            <div>
-                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 mb-4 px-1">Medical History</h3>
-                <div className="space-y-4">
-                    {patient.history.map(record => (
-                        <div key={record.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 shadow-sm">
-                            <div className="flex justify-between items-start mb-2">
-                                <div>
-                                    <h4 className="font-bold text-slate-900 dark:text-slate-100">{record.diagnosis}</h4>
-                                    <p className="text-sm text-slate-500 dark:text-slate-400">{record.doctor} • {record.speciality}</p>
-                                </div>
-                                <span className="text-xs font-medium text-slate-400 bg-slate-50 dark:bg-slate-800 px-2 py-1 rounded-md">
-                                    {record.date}
-                                </span>
+                <div className="grid grid-cols-1 gap-3">
+                    {/* Allergies */}
+                    <div className="bg-orange-50/50 border border-orange-100 p-4 rounded-xl">
+                        <div className="flex items-center gap-2 mb-2 text-orange-800 font-semibold text-sm">
+                            <AlertCircle size={16} /> Known Allergies
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {patient.summary.allergies.map(a => (
+                                <Badge key={a} variant="outline" className="bg-white border-orange-200 text-slate-700">{a}</Badge>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Conditions */}
+                    <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl">
+                        <div className="flex items-center gap-2 mb-2 text-blue-800 font-semibold text-sm">
+                            <FileText size={16} /> Diagnosed Conditions
+                        </div>
+                        <div className="space-y-2">
+                            <div className="flex items-center gap-2 text-sm text-slate-700">
+                                <span className="w-2 h-2 rounded-full bg-red-400" />
+                                <span>Current: <span className="font-medium">{patient.summary.chronicConditions.join(", ")}</span></span>
                             </div>
-
-                            {/* Expandable Meds Section - Simple Implementation */}
-                            <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Prescribed Medicines</p>
-                                <ul className="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 space-y-1">
-                                    {record.medicines.map((med, idx) => (
-                                        <li key={idx}>{med}</li>
-                                    ))}
-                                </ul>
+                            <div className="flex items-center gap-2 text-sm text-slate-500">
+                                <span className="w-2 h-2 rounded-full bg-slate-300" />
+                                <span>Past: {patient.summary.pastConditions.join(", ")}</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Action Button */}
+            <Button
+                onClick={() => navigate(`/doctor/diagnose/${id}`)}
+                className="w-full h-14 text-lg font-bold bg-slate-900 text-white rounded-xl shadow-xl shadow-slate-900/10 hover:bg-slate-800 transition-all active:scale-[0.98] flex items-center justify-center gap-3"
+            >
+                <Stethoscope size={22} /> Diagnose Patient
+            </Button>
+
+            {/* Medical History */}
+            <div>
+                <div className="flex items-center justify-between mb-4 mt-2">
+                    <h3 className="text-lg font-bold text-slate-900">Patient History</h3>
+                    <Button variant="ghost" size="sm" className="text-blue-600 text-xs">View All</Button>
+                </div>
+
+                <div className="space-y-4">
+                    {patient.history.map(record => (
+                        <Card key={record.id} className="p-4 border border-slate-200 shadow-sm">
+                            <div className="flex justify-between items-start mb-3">
+                                <div>
+                                    <h4 className="font-bold text-slate-900 text-base">{record.diagnosis}</h4>
+                                    <p className="text-xs text-slate-500 font-medium mt-0.5">
+                                        {record.doctor} {record.isSelf && <span className="text-blue-600">(You)</span>}
+                                    </p>
+                                    <p className="text-[10px] text-slate-400">{record.hospital}</p>
+                                </div>
+                                <Badge variant={record.status === 'Active' ? 'default' : 'secondary'} className={record.status === 'Active' ? "bg-green-100 text-green-700 hover:bg-green-100" : ""}>
+                                    {record.status}
+                                </Badge>
+                            </div>
+
+                            <div className="bg-slate-50 rounded-lg p-3 text-sm">
+                                <p className="text-xs font-bold text-slate-400 uppercase mb-2">Prescription</p>
+                                <ul className="space-y-1">
+                                    {record.medicines.map((med, idx) => (
+                                        <li key={idx} className="flex items-center gap-2 text-slate-700">
+                                            <CheckCircle2 size={12} className="text-slate-400" /> {med}
+                                        </li>
+                                    ))}
+                                </ul>
+                                <div className="mt-3 pt-2 border-t border-slate-200 flex justify-between items-center">
+                                    <span className="text-[10px] text-slate-400">{record.date}</span>
+                                    {/* Mock Signature */}
+                                    <div className="text-[10px] font-handwriting text-slate-600 italic">Signed: {record.doctor}</div>
+                                </div>
+                            </div>
+                        </Card>
                     ))}
                 </div>
             </div>

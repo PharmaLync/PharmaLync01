@@ -73,6 +73,12 @@ const DoctorProfilePage = () => {
                         <p className="text-slate-800 font-medium">dr.sharma@apollo.com</p>
                     </div>
                 </div>
+                <div className="p-4 flex justify-between items-center hover:bg-slate-50 transition-colors">
+                    <div>
+                        <p className="text-xs text-slate-400 uppercase font-bold">Location</p>
+                        <p className="text-slate-800 font-medium">Salt Lake, Sector V, Kolkata</p>
+                    </div>
+                </div>
             </Card>
 
             {/* Actions */}

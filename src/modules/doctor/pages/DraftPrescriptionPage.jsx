@@ -2,40 +2,44 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Plus, Trash2, Search, CheckCircle2, ShieldCheck, PenTool } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Plus, Trash2, Search, CheckCircle, Pill, CalendarClock } from 'lucide-react';
+import PageTransition from '@/components/ui/PageTransition';
+
+const medicinesMock = [
+    { id: 1, name: "Dolo 650mg", type: "Tablet" },
+    { id: 2, name: "Cetirizine 10mg", type: "Tablet" },
+    { id: 3, name: "Azithromycin 500mg", type: "Tablet" },
+    { id: 4, name: "Pan 40", type: "Tablet" },
+    { id: 5, name: "Montelukast", type: "Tablet" }
+];
 
 const DraftPrescriptionPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    // Med Database Mock
-    const medDatabase = [
-        { id: 'm1', name: 'Dolo 650', type: 'Tablet' },
-        { id: 'm2', name: 'Amoxicillin 500mg', type: 'Capsule' },
-        { id: 'm3', name: 'Azithromycin 500mg', type: 'Tablet' },
-        { id: 'm4', name: 'Pantoprazole 40mg', type: 'Tablet' },
-        { id: 'm5', name: 'Cough Syrup', type: 'Syrup' },
-    ];
-
-    const [search, setSearch] = useState('');
+    // State
+    const [searchQuery, setSearchQuery] = useState('');
     const [selectedMeds, setSelectedMeds] = useState([]);
-    const [showSignature, setShowSignature] = useState(false);
 
-    // Add Med
+    // Add Med Logic
     const addMed = (med) => {
-        setSelectedMeds([...selectedMeds, { ...med, dosage: '1-0-1', duration: '3 Days', timing: 'After Food' }]);
-        setSearch('');
+        setSelectedMeds([...selectedMeds, {
+            ...med,
+            dosage: '1-0-1',
+            qty: 10,
+            validity: '5 Days'
+        }]);
+        setSearchQuery('');
     };
 
-    // Remove Med
+    // Remove Med Logic
     const removeMed = (index) => {
         const newMeds = [...selectedMeds];
         newMeds.splice(index, 1);
         setSelectedMeds(newMeds);
     };
 
-    // Update Med Details
+    // Update Field Logic
     const updateMed = (index, field, value) => {
         const newMeds = [...selectedMeds];
         newMeds[index][field] = value;
@@ -44,139 +48,130 @@ const DraftPrescriptionPage = () => {
 
     const handleIssue = () => {
         if (selectedMeds.length === 0) {
-            alert("Add at least one medicine.");
+            alert("Please add at least one medicine.");
             return;
         }
-        setShowSignature(true);
-        setTimeout(() => {
-            alert("Prescription Issued Successfully!");
-            navigate('/doctor/activity');
-        }, 1500);
+        alert("Prescription Digitally Signed & Issued!");
+        navigate('/doctor/activity');
     };
 
     return (
-        <div className="px-4 py-6 pb-32 space-y-6">
-            <h1 className="text-xl font-bold text-slate-900">Draft Prescription</h1>
+        <PageTransition className="px-4 py-6 pb-32 space-y-6">
+            <div>
+                <p className="text-sm font-bold text-slate-400 uppercase">Step 2 of 2</p>
+                <h1 className="text-2xl font-bold text-slate-900">Draft Prescription</h1>
+            </div>
 
-            {/* Search Bar */}
+            {/* Medicine Selector */}
             <div className="relative z-20">
-                <Search className="absolute left-4 top-3.5 text-slate-400" size={20} />
-                <input
-                    type="text"
-                    placeholder="Search medicines (e.g. Dolo)"
-                    className="w-full pl-12 pr-4 py-3 rounded-xl bg-white border border-slate-200 shadow-sm focus:ring-2 focus:ring-teal-500/20 focus:outline-none"
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                />
-                {/* Search Dropdown */}
-                {search && (
-                    <div className="absolute top-full left-0 w-full bg-white rounded-xl shadow-xl mt-2 border border-slate-100 overflow-hidden">
-                        {medDatabase.filter(m => m.name.toLowerCase().includes(search.toLowerCase())).map(med => (
-                            <div
-                                key={med.id}
-                                onClick={() => addMed(med)}
-                                className="p-3 hover:bg-slate-50 border-b border-slate-50 last:border-0 cursor-pointer flex justify-between items-center"
-                            >
-                                <span className="font-medium text-slate-800">{med.name}</span>
-                                <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded">{med.type}</span>
-                            </div>
-                        ))}
+                <div className="relative">
+                    <input
+                        type="text"
+                        placeholder="Search Medicines (e.g. Dolo)"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                </div>
+
+                {/* Search Results Dropdown */}
+                {searchQuery && (
+                    <div className="absolute top-full left-0 w-full bg-white border border-slate-100 shadow-xl rounded-xl mt-2 overflow-hidden max-h-48 overflow-y-auto">
+                        {medicinesMock
+                            .filter(m => m.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                            .map(med => (
+                                <div
+                                    key={med.id}
+                                    onClick={() => addMed(med)}
+                                    className="p-3 hover:bg-slate-50 cursor-pointer flex justify-between items-center border-b border-slate-50 last:border-0"
+                                >
+                                    <span className="font-medium text-slate-800">{med.name}</span>
+                                    <span className="text-xs text-slate-400">{med.type}</span>
+                                </div>
+                            ))
+                        }
                     </div>
                 )}
             </div>
 
-            {/* Selected Meds List */}
+            {/* Added Medicines List */}
             <div className="space-y-4">
-                <AnimatePresence>
-                    {selectedMeds.map((med, idx) => (
-                        <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 relative"
-                        >
-                            <button onClick={() => removeMed(idx)} className="absolute top-2 right-2 text-slate-400 hover:text-red-500">
+                {selectedMeds.map((med, idx) => (
+                    <Card key={idx} className="p-4 border border-slate-200 shadow-sm relative group">
+                        <div className="flex justify-between items-start mb-4">
+                            <h3 className="font-bold text-slate-800 flex items-center gap-2">
+                                <span className="w-6 h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xs">{idx + 1}</span>
+                                {med.name}
+                            </h3>
+                            <button onClick={() => removeMed(idx)} className="text-red-400 hover:text-red-600 p-1">
                                 <Trash2 size={16} />
                             </button>
+                        </div>
 
-                            <h3 className="font-bold text-slate-900 mb-3">{med.name}</h3>
-
-                            <div className="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label className="text-[10px] uppercase font-bold text-slate-400">Dosage</label>
-                                    <input
-                                        type="text"
-                                        value={med.dosage}
-                                        onChange={e => updateMed(idx, 'dosage', e.target.value)}
-                                        className="w-full p-2 rounded bg-slate-50 border border-slate-100 text-sm font-medium"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="text-[10px] uppercase font-bold text-slate-400">Duration</label>
-                                    <input
-                                        type="text"
-                                        value={med.duration}
-                                        onChange={e => updateMed(idx, 'duration', e.target.value)}
-                                        className="w-full p-2 rounded bg-slate-50 border border-slate-100 text-sm font-medium"
-                                    />
-                                </div>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div className="space-y-1">
+                                <label className="text-[10px] uppercase font-bold text-slate-400">Dosage</label>
+                                <input
+                                    type="text"
+                                    value={med.dosage}
+                                    onChange={(e) => updateMed(idx, 'dosage', e.target.value)}
+                                    className="w-full p-2 bg-slate-50 rounded-lg text-sm font-medium border-transparent focus:bg-white focus:border-blue-200 border transition-all"
+                                />
                             </div>
-                            <div className="mt-2">
-                                <label className="text-[10px] uppercase font-bold text-slate-400">Timing</label>
-                                <select
-                                    value={med.timing}
-                                    onChange={e => updateMed(idx, 'timing', e.target.value)}
-                                    className="w-full p-2 rounded bg-slate-50 border border-slate-100 text-sm font-medium"
-                                >
-                                    <option>After Food</option>
-                                    <option>Before Food</option>
-                                    <option>Before Bed</option>
-                                </select>
+                            <div className="space-y-1">
+                                <label className="text-[10px] uppercase font-bold text-slate-400">Duration</label>
+                                <input
+                                    type="text"
+                                    value={med.validity}
+                                    onChange={(e) => updateMed(idx, 'validity', e.target.value)}
+                                    className="w-full p-2 bg-slate-50 rounded-lg text-sm font-medium border-transparent focus:bg-white focus:border-blue-200 border transition-all"
+                                />
                             </div>
-                        </motion.div>
-                    ))}
-                </AnimatePresence>
+                            <div className="space-y-1 col-span-2">
+                                <label className="text-[10px] uppercase font-bold text-slate-400">Total Qty</label>
+                                <input
+                                    type="number"
+                                    value={med.qty}
+                                    onChange={(e) => updateMed(idx, 'qty', e.target.value)}
+                                    className="w-full p-2 bg-slate-50 rounded-lg text-sm font-medium border-transparent focus:bg-white focus:border-blue-200 border transition-all"
+                                />
+                            </div>
+                        </div>
+                    </Card>
+                ))}
 
-                {selectedMeds.length === 0 && !search && (
-                    <div className="text-center py-10 text-slate-400">
-                        <Plus className="mx-auto w-12 h-12 opacity-20 mb-2" />
-                        <p>Search and add medicines above</p>
+                {selectedMeds.length === 0 && (
+                    <div className="text-center py-10 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
+                        <Pill className="mx-auto text-slate-300 mb-2" size={32} />
+                        <p className="text-slate-400 font-medium text-sm">No medicines added yet.</p>
                     </div>
                 )}
             </div>
 
-            {/* Signature Block */}
-            <div className="border-t-2 border-dashed border-slate-200 pt-4 mt-8 flex justify-end">
+            {/* Digital Signature Block */}
+            <div className="mt-8 border-t border-slate-100 pt-6 flex justify-end">
                 <div className="text-right">
-                    {showSignature ? (
-                        <div className="flex flex-col items-end">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Signature_sample.svg" alt="Signature" className="h-10 opacity-70 mb-1" />
-                            <div className="flex items-center gap-1 text-teal-600 text-[10px] font-bold uppercase tracking-wider">
-                                <ShieldCheck size={12} /> Digitally Signed
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="h-14 w-32 bg-slate-100 rounded flex items-center justify-center text-xs text-slate-400 border border-slate-200">
-                            Signature Placeholder
-                        </div>
-                    )}
-                    <p className="text-xs font-bold text-slate-900 mt-1">Dr. Sharma</p>
-                    <p className="text-[10px] text-slate-500">License: WBMC-8821</p>
+                    <div className="w-40 h-16 bg-white border border-slate-200 rounded-lg flex items-center justify-center mb-2 overflow-hidden relative">
+                        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                        <p className="font-handwriting text-xl text-blue-900 -rotate-6">Dr. Sharma</p>
+                    </div>
+                    <div className="flex items-center justify-end gap-1 text-xs text-green-600 font-bold uppercase tracking-wider">
+                        <CheckCircle size={12} /> Digitally Signed
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-1">Reg: WBMC-2023-8821</p>
                 </div>
             </div>
 
-            {/* Footer Action */}
-            <div className="fixed bottom-20 left-0 w-full p-4 bg-white/80 backdrop-blur-md border-t border-slate-100 z-40">
+            <div className="fixed bottom-20 left-0 w-full px-6 py-4 bg-white/80 backdrop-blur-md border-t border-slate-200 shadow-lg-up">
                 <Button
                     onClick={handleIssue}
-                    disabled={selectedMeds.length === 0}
-                    className="w-full h-14 bg-teal-700 hover:bg-teal-800 text-lg shadow-xl shadow-teal-900/20 rounded-2xl"
+                    className="w-full max-w-md mx-auto h-12 bg-teal-700 hover:bg-teal-800 text-white rounded-xl shadow-lg shadow-teal-700/20"
                 >
-                    {showSignature ? 'Sending...' : 'Issue Prescription'} <CheckCircle2 className="ml-2" />
+                    Issue Prescription
                 </Button>
             </div>
-        </div>
+        </PageTransition>
     );
 };
 
