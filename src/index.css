@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', 'Plus Jakarta Sans', sans-serif;
+
+  --color-medical-green: #10B981;
+  --color-medical-red: #EF4444;
+
+  --radius-2xl: 16px;
+
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  --blur-xs: 2px;
+}
+
+@utility glass {
+  @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+}
+
+@utility glass-card {
+  @apply bg-white/80 backdrop-blur-lg border border-white/50 shadow-sm transition-all duration-300;
+}
+
+@utility glass-header {
+  @apply bg-white/60 backdrop-blur-md border-b border-gray-200/50;
+}
+
+@utility card-gradient {
+  @apply bg-gradient-to-br from-teal-700 to-blue-600;
+}
+
+body {
+  @apply font-sans;
+}
