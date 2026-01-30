@@ -13,10 +13,13 @@ const PatientDetailsPage = () => {
 
     // Mock Patient Data - AUTHENTIC STRUCTURE
     const patient = {
-        name: "Rahul Deshmukh",
+        name: "Harish Kumar",
         age: 34,
+        gender: "Male",
         bloodGroup: "O+",
-        img: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rahul",
+        id: "P-12345",
+        lastVisit: "2 days ago",
+        // img: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=200&h=200",
 
         // Medical Summary
         summary: {
@@ -25,7 +28,6 @@ const PatientDetailsPage = () => {
             pastConditions: ["Typhoid (2018)", "Fractured Radius (2020)"]
         },
 
-        // History
         history: [
             {
                 id: 101,

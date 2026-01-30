@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { Html5Qrcode } from 'html5-qrcode';
 import { usePharmacyStore } from '../store';
 import { useNavigate } from 'react-router-dom';
 import { api } from '@/lib/api';
@@ -40,11 +41,26 @@ const DispensePage = () => {
     // If no patient is set, redirect back to scan (for safety)
     useEffect(() => {
         if (!currentPatient) {
-            // For hackathon demo, maybe we want to allow staying here if implementing 'Guest' checkout?
-            // But requirement said "Scan Patient ID -> Medical Dispense Page".
-            // So if no patient, maybe we just mock one for testing or redirect?
-            // Let's redirect for correctness.
-            // navigate('/pharmacist/scan');
+            // MOCK DATA FOR DEMO - User Request: "strightly show the mock datas" for Harish Kumar
+            usePharmacyStore.setState({
+                currentPatient: {
+                    id: 'P-12345',
+                    name: 'Harish Kumar',
+                    age: 34,
+                    prescriptions: [
+                        {
+                            id: 'RX-98765',
+                            date: 'Today',
+                            doctor: 'Dr. Sharma',
+                            medicines: [
+                                { medicineId: 'm1', name: 'Paracetamol 500mg', dosage: '1-0-1', days: 3, maxQty: 10, dispensed: 0 },
+                                { medicineId: 'm3', name: 'Augmentin 625', dosage: '1-0-1', days: 5, maxQty: 10, dispensed: 0 }
+                            ],
+                            status: 'active'
+                        }
+                    ]
+                }
+            });
         }
     }, [currentPatient, navigate]);
 
@@ -53,20 +69,85 @@ const DispensePage = () => {
 
     // --- ACTIONS ---
 
-    const handleScanMedicine = (medId) => {
+    const html5QrCodeRef = React.useRef(null);
+    const scannerRef = React.useRef(null);
+
+    const startScanner = async () => {
         setIsScanning(true);
-        setTimeout(() => {
-            const med = inventory.find(m => m.id === medId);
-            if (med) {
-                addToBill(med, 1);
-                setScanMessage(`Scanned: ${med.name}`);
-            } else {
-                setScanMessage('Medicine not found');
+        setScanMessage('');
+
+        setTimeout(async () => {
+            try {
+                if (!html5QrCodeRef.current) {
+                    html5QrCodeRef.current = new Html5Qrcode("med-reader");
+                }
+
+                // Config for scanner
+                const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+                // Start scanning
+                await html5QrCodeRef.current.start(
+                    { facingMode: "environment" },
+                    config,
+                    (decodedText) => {
+                        // On Success
+                        handleRealScan(decodedText);
+                    },
+                    (errorMessage) => {
+                        // ignore errors
+                    }
+                );
+            } catch (err) {
+                console.error("Error starting scanner", err);
+                setIsScanning(false);
+                alert("Camera error: " + err);
             }
-            setIsScanning(false);
-            setTimeout(() => setScanMessage(''), 2000);
-        }, 800);
+        }, 100);
     };
+
+    const stopScanner = async () => {
+        if (html5QrCodeRef.current && html5QrCodeRef.current.isScanning) {
+            try {
+                await html5QrCodeRef.current.stop();
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        setIsScanning(false);
+    };
+
+    const handleRealScan = (scannedText) => {
+        // MOCK LOGIC: "Mock everything"
+        // If the scanned text matches a medicine ID, use it.
+        // If not, pick a random medicine from inventory to simulate a successful scan of a box.
+
+        let med = inventory.find(m => m.id === scannedText || m.name === scannedText);
+
+        if (!med) {
+            // MOCK: Pick a random med to make the demo work smoothly with any QR code
+            const randomIndex = Math.floor(Math.random() * inventory.length);
+            med = inventory[randomIndex];
+        }
+
+        if (med) {
+            addToBill(med, 1);
+            setScanMessage(`Scanned: ${med.name}`);
+
+            // Optional: Stop scanner after one scan or keep it open?
+            // Usually for POS, keep open. But for mobile, maybe pause?
+            // Let's keep it open but show feedback.
+            setTimeout(() => setScanMessage(''), 2000);
+        }
+    };
+
+    // Cleanup scanner on unmount
+    useEffect(() => {
+        return () => {
+            if (html5QrCodeRef.current && html5QrCodeRef.current.isScanning) {
+                html5QrCodeRef.current.stop().catch(console.error);
+            }
+        };
+    }, []);
 
     const addToBill = (med, qty, prescriptionId = null, medRx = null) => {
         setBillItems(prev => {
@@ -151,20 +232,14 @@ const DispensePage = () => {
     const handleCheckout = async () => {
         setIsScanning(true); // Reuse as loading state
         try {
-            // Process all items via backend
-            for (const item of billItems) {
-                // In a real production app, this would be a single batch request
-                // For MVP, we call the dispense endpoint for each item
-                // Note: Prescription dispensing usually happens via the prescription endpoint
-                if (item.prescriptionId) {
-                    await api.prescriptions.verifyQr(item.prescriptionId); // Re-verify or call dispense
-                    // In a more complex setup, we'd have a specific dispense endpoint here
-                }
-            }
-            setShowConfirm(true);
+            // MOCKED CHECKOUT - No API Calls
+            // Just assume everything is verified
+            setTimeout(() => {
+                setShowConfirm(true);
+                setIsScanning(false);
+            }, 1500);
         } catch (error) {
             alert("Checkout Failed: " + error.message);
-        } finally {
             setIsScanning(false);
         }
     };
@@ -288,24 +363,41 @@ const DispensePage = () => {
                 {/* Left Panel: Medicine Scan & Cart */}
                 <div className="space-y-4">
                     {/* Mock Scanner */}
-                    <Card
-                        className="bg-slate-900 text-white p-6 rounded-2xl flex flex-col items-center justify-center h-48 cursor-pointer relative overflow-hidden"
-                        onClick={() => handleScanMedicine(inventory[0]?.id)} // Quick mock scan first item on click
-                    >
-                        <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-purple-500/20"></div>
-                        <ScanLine size={48} className={`mb-4 ${isScanning ? 'animate-pulse text-teal-400' : 'text-slate-400'}`} />
-                        <p className="font-medium z-10">{isScanning ? 'Scanning...' : 'Tap to Simulate Scan'}</p>
-                        <p className="text-xs text-slate-400 z-10 mt-2">Simulates scanning any medicine box</p>
+                    {/* Real Scanner for Medicines */}
+                    <div className="bg-slate-900 text-white rounded-2xl overflow-hidden shadow-lg relative min-h-[14rem]">
+                        {!isScanning ? (
+                            <div
+                                className="flex flex-col items-center justify-center p-6 h-56 cursor-pointer hover:bg-slate-800 transition-colors"
+                                onClick={startScanner}
+                            >
+                                <ScanLine size={48} className="mb-4 text-teal-400" />
+                                <p className="font-bold text-lg">Tap to Scan Medicine</p>
+                                <p className="text-xs text-slate-400 mt-2 text-center">Scan medicine barcode/QR to add to bill</p>
+                            </div>
+                        ) : (
+                            <div className="w-full h-full relative">
+                                <div id="med-reader" className="w-full h-64 bg-black"></div>
+                                <button
+                                    onClick={stopScanner}
+                                    className="absolute top-2 right-2 p-2 bg-black/50 text-white rounded-full z-10"
+                                >
+                                    <X size={20} />
+                                </button>
+                                <div className="absolute inset-0 pointer-events-none border-2 border-teal-500/50 z-0"></div>
+                            </div>
+                        )}
 
                         {scanMessage && (
-                            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="absolute bottom-4 bg-black/80 px-4 py-2 rounded-full text-xs font-bold text-green-400">
+                            <motion.div
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                exit={{ y: 20, opacity: 0 }}
+                                className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-teal-600 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg z-20 whitespace-nowrap"
+                            >
                                 {scanMessage}
                             </motion.div>
                         )}
-
-                        {/* Hidden triggers for other meds */}
-
-                    </Card>
+                    </div>
 
                     {/* Current Dispense List (Cart) */}
                     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">

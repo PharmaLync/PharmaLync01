@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { QrCode, CreditCard, ShieldCheck } from 'lucide-react';
+import QRCode from "react-qr-code";
 import { Button } from '@/components/ui/button';
 
 const DigitalIdentityCard = () => {
     const [isFlipped, setIsFlipped] = useState(false);
+
+    const patientData = {
+        type: 'patient',
+        id: 'P-12345',
+        name: 'Harish Kumar',
+        dob: '12 Aug 1990',
+        bloodGroup: 'O+',
+        gender: 'Male'
+    };
 
     const handleFlip = () => {
         setIsFlipped(!isFlipped);
@@ -28,8 +38,8 @@ const DigitalIdentityCard = () => {
                     {/* Header */}
                     <div className="flex justify-between items-start z-10">
                         <div className="flex items-center gap-2">
-                            <div className="bg-white/20 p-1 rounded-lg backdrop-blur-sm">
-                                <Logo variant="icon-only" size="xs" className="text-white" />
+                            <div className="bg-white/20 p-1.5 rounded-lg backdrop-blur-sm">
+                                <ShieldCheck size={20} className="text-white" />
                             </div>
                             <span className="font-semibold tracking-wide text-sm opacity-90">PharmaLync ID</span>
                         </div>
@@ -75,8 +85,15 @@ const DigitalIdentityCard = () => {
                 >
                     <h3 className="text-teal-900 dark:text-teal-400 font-bold mb-4">Patient QR Code</h3>
                     <div className="bg-white p-2 rounded-xl border-2 border-teal-100 dark:border-teal-900 shadow-inner">
-                        {/* Mock QR */}
-                        <QrCode size={120} className="text-teal-900" />
+                        {/* Real QR */}
+                        <div style={{ height: "auto", margin: "0 auto", maxWidth: 120, width: "100%" }}>
+                            <QRCode
+                                size={256}
+                                style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                                value={JSON.stringify(patientData)}
+                                viewBox={`0 0 256 256`}
+                            />
+                        </div>
                     </div>
                     <p className="mt-4 text-xs text-slate-400 dark:text-slate-500 text-center">Scan this code at any PharmaLync partner clinic or pharmacy.</p>
                 </div>

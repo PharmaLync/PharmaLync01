@@ -63,6 +63,20 @@ const ScanQR = () => {
     const handleVerification = async (token) => {
         if (!token) return;
         setIsLoading(true);
+
+        // Check if scanned code is direct Patient Data (JSON)
+        try {
+            const data = JSON.parse(token);
+            if (data.type === 'patient' && data.id) {
+                // Direct Patient QR
+                setPatient(data.id);
+                navigate('/pharmacist/dispense');
+                return;
+            }
+        } catch (e) {
+            // Not a JSON object, proceed to API verification
+        }
+
         try {
             const result = await api.prescriptions.verifyQr(token);
 

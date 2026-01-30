@@ -16,24 +16,31 @@ const BottomNav = () => {
     ];
 
     return (
-        <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-6 py-2 pb-6 z-50 flex justify-around items-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <div className="fixed bottom-0 left-0 w-full bg-white dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800 px-6 py-2 pb-6 z-50 flex justify-around items-center shadow-[0_-4px_20px_rgba(0,0,0,0.05)] dark:shadow-none">
             {navItems.map((item) => {
                 const isActive = location.pathname === item.path;
                 return (
                     <button
                         key={item.id}
                         onClick={() => navigate(item.path)}
-                        className="flex flex-col items-center gap-1 min-w-[64px]"
+                        className="flex flex-col items-center gap-1.5 relative w-16"
                     >
-                        <div className={cn(
-                            "p-2 rounded-xl transition-all duration-300",
-                            isActive ? "bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 translate-y-[-4px] shadow-sm" : "text-slate-400 dark:text-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800"
-                        )}>
-                            <item.icon size={24} strokeWidth={isActive ? 2.5 : 2} />
-                        </div>
+                        {isActive && (
+                            <motion.div
+                                layoutId="nav-bg"
+                                className="absolute -top-2 w-10 h-1 bg-teal-600 dark:bg-teal-500 rounded-b-lg"
+                            />
+                        )}
+                        <item.icon
+                            size={24}
+                            className={cn(
+                                "transition-colors duration-300",
+                                isActive ? "text-teal-700 dark:text-teal-400" : "text-slate-400 dark:text-slate-600"
+                            )}
+                        />
                         <span className={cn(
                             "text-[10px] font-medium transition-colors",
-                            isActive ? "text-teal-700 dark:text-teal-400" : "text-slate-400 dark:text-slate-600"
+                            isActive ? "text-teal-900 dark:text-teal-100" : "text-slate-400 dark:text-slate-600"
                         )}>
                             {item.label}
                         </span>
