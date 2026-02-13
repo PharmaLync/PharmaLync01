@@ -59,7 +59,7 @@ const PatientDetailsPage = () => {
 
             {/* Overview Section */}
             <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm flex items-start gap-4">
-                <div className="w-20 h-20 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 border border-slate-100">
+                <div className="w-20 h-20 rounded-xl overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0 border border-slate-100 dark:border-slate-800">
                     <img src={patient.img} alt={patient.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="flex-1">
@@ -70,10 +70,10 @@ const PatientDetailsPage = () => {
                         <span>Male</span>
                     </div>
                     <div className="flex gap-2">
-                        <Badge variant="secondary" className="bg-red-50 text-red-700 border-red-100">
+                        <Badge variant="secondary" className="bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-red-100 dark:border-red-900/30">
                             {patient.bloodGroup}
                         </Badge>
-                        <Badge variant="outline" className="text-slate-500">
+                        <Badge variant="outline" className="text-slate-500 dark:text-slate-400 border-slate-200 dark:border-slate-700">
                             ID: {id}
                         </Badge>
                     </div>
@@ -82,33 +82,33 @@ const PatientDetailsPage = () => {
 
             {/* Medical Summary Section */}
             <div className="space-y-3">
-                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">Medical Summary</h3>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wide">Medical Summary</h3>
 
                 <div className="grid grid-cols-1 gap-3">
                     {/* Allergies */}
-                    <div className="bg-orange-50/50 border border-orange-100 p-4 rounded-xl">
-                        <div className="flex items-center gap-2 mb-2 text-orange-800 font-semibold text-sm">
+                    <div className="bg-orange-50/50 dark:bg-orange-900/10 border border-orange-100 dark:border-orange-900/30 p-4 rounded-xl">
+                        <div className="flex items-center gap-2 mb-2 text-orange-800 dark:text-orange-400 font-semibold text-sm">
                             <AlertCircle size={16} /> Known Allergies
                         </div>
                         <div className="flex flex-wrap gap-2">
                             {patient.summary.allergies.map(a => (
-                                <Badge key={a} variant="outline" className="bg-white border-orange-200 text-slate-700">{a}</Badge>
+                                <Badge key={a} variant="outline" className="bg-white dark:bg-slate-800 border-orange-200 dark:border-orange-900/50 text-slate-700 dark:text-slate-300">{a}</Badge>
                             ))}
                         </div>
                     </div>
 
                     {/* Conditions */}
-                    <div className="bg-blue-50/50 border border-blue-100 p-4 rounded-xl">
-                        <div className="flex items-center gap-2 mb-2 text-blue-800 font-semibold text-sm">
+                    <div className="bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 p-4 rounded-xl">
+                        <div className="flex items-center gap-2 mb-2 text-blue-800 dark:text-blue-400 font-semibold text-sm">
                             <FileText size={16} /> Diagnosed Conditions
                         </div>
                         <div className="space-y-2">
-                            <div className="flex items-center gap-2 text-sm text-slate-700">
+                            <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
                                 <span className="w-2 h-2 rounded-full bg-red-400" />
                                 <span>Current: <span className="font-medium">{patient.summary.chronicConditions.join(", ")}</span></span>
                             </div>
-                            <div className="flex items-center gap-2 text-sm text-slate-500">
-                                <span className="w-2 h-2 rounded-full bg-slate-300" />
+                            <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                                <span className="w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-600" />
                                 <span>Past: {patient.summary.pastConditions.join(", ")}</span>
                             </div>
                         </div>
@@ -119,7 +119,7 @@ const PatientDetailsPage = () => {
             {/* Action Button */}
             <Button
                 onClick={() => navigate(`/doctor/diagnose/${id}`)}
-                className="w-full h-14 text-lg font-bold bg-slate-900 text-white rounded-xl shadow-xl shadow-slate-900/10 hover:bg-slate-800 transition-all active:scale-[0.98] flex items-center justify-center gap-3"
+                className="w-full h-14 text-lg font-bold bg-slate-900 dark:bg-teal-600 text-white rounded-xl shadow-xl shadow-slate-900/10 dark:shadow-teal-900/20 hover:bg-slate-800 dark:hover:bg-teal-500 transition-all active:scale-[0.98] flex items-center justify-center gap-3"
             >
                 <Stethoscope size={22} /> Diagnose Patient
             </Button>
@@ -127,39 +127,39 @@ const PatientDetailsPage = () => {
             {/* Medical History */}
             <div>
                 <div className="flex items-center justify-between mb-4 mt-2">
-                    <h3 className="text-lg font-bold text-slate-900">Patient History</h3>
-                    <Button variant="ghost" size="sm" className="text-blue-600 text-xs">View All</Button>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Patient History</h3>
+                    <Button variant="ghost" size="sm" className="text-blue-600 dark:text-blue-400 text-xs">View All</Button>
                 </div>
 
                 <div className="space-y-4">
                     {patient.history.map(record => (
-                        <Card key={record.id} className="p-4 border border-slate-200 shadow-sm">
+                        <Card key={record.id} className="p-4 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
                             <div className="flex justify-between items-start mb-3">
                                 <div>
-                                    <h4 className="font-bold text-slate-900 text-base">{record.diagnosis}</h4>
-                                    <p className="text-xs text-slate-500 font-medium mt-0.5">
-                                        {record.doctor} {record.isSelf && <span className="text-blue-600">(You)</span>}
+                                    <h4 className="font-bold text-slate-900 dark:text-slate-100 text-base">{record.diagnosis}</h4>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                                        {record.doctor} {record.isSelf && <span className="text-blue-600 dark:text-blue-400">(You)</span>}
                                     </p>
-                                    <p className="text-[10px] text-slate-400">{record.hospital}</p>
+                                    <p className="text-[10px] text-slate-400 dark:text-slate-500">{record.hospital}</p>
                                 </div>
-                                <Badge variant={record.status === 'Active' ? 'default' : 'secondary'} className={record.status === 'Active' ? "bg-green-100 text-green-700 hover:bg-green-100" : ""}>
+                                <Badge variant={record.status === 'Active' ? 'default' : 'secondary'} className={record.status === 'Active' ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/30 border-none" : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-none"}>
                                     {record.status}
                                 </Badge>
                             </div>
 
-                            <div className="bg-slate-50 rounded-lg p-3 text-sm">
-                                <p className="text-xs font-bold text-slate-400 uppercase mb-2">Prescription</p>
+                            <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3 text-sm border border-slate-100 dark:border-slate-800">
+                                <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase mb-2">Prescription</p>
                                 <ul className="space-y-1">
                                     {record.medicines.map((med, idx) => (
-                                        <li key={idx} className="flex items-center gap-2 text-slate-700">
-                                            <CheckCircle2 size={12} className="text-slate-400" /> {med}
+                                        <li key={idx} className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+                                            <CheckCircle2 size={12} className="text-slate-400 dark:text-slate-500" /> {med}
                                         </li>
                                     ))}
                                 </ul>
-                                <div className="mt-3 pt-2 border-t border-slate-200 flex justify-between items-center">
-                                    <span className="text-[10px] text-slate-400">{record.date}</span>
+                                <div className="mt-3 pt-2 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
+                                    <span className="text-[10px] text-slate-400 dark:text-slate-500">{record.date}</span>
                                     {/* Mock Signature */}
-                                    <div className="text-[10px] font-handwriting text-slate-600 italic">Signed: {record.doctor}</div>
+                                    <div className="text-[10px] font-handwriting text-slate-600 dark:text-slate-400 italic">Signed: {record.doctor}</div>
                                 </div>
                             </div>
                         </Card>

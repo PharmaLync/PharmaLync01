@@ -165,7 +165,7 @@ const ScanQRPage = () => {
                     <input
                         type="text"
                         placeholder="Patient ID / Mobile"
-                        className="w-full px-4 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white transition-all shadow-sm"
+                        className="w-full px-4 py-3.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-white transition-all shadow-sm placeholder:text-slate-400 dark:placeholder:text-slate-500"
                         onKeyDown={(e) => {
                             if (e.key === 'Enter') navigate(`/doctor/patient/${e.target.value}`)
                         }}

@@ -64,8 +64,8 @@ const ActivityLogPage = () => {
 
     return (
         <div className="px-4 py-6 pb-24 space-y-6">
-            <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                <Activity className="text-teal-600" />
+            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                <Activity className="text-teal-600 dark:text-teal-400" />
                 Weekly Activity Log
             </h1>
 
@@ -77,19 +77,19 @@ const ActivityLogPage = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
                     >
-                        <Card className="p-4 border-0 shadow-sm flex gap-4 items-start hover:bg-slate-50 transition-colors">
-                            <div className={`p-3 rounded-full ${item.bg} ${item.color} shrink-0`}>
+                        <Card className="p-4 border-0 shadow-sm dark:shadow-none flex gap-4 items-start hover:bg-slate-50 dark:hover:bg-slate-800/50 bg-white dark:bg-slate-900/50 transition-colors">
+                            <div className={`p-3 rounded-full ${item.bg} dark:bg-opacity-20 ${item.color} dark:text-opacity-90 shrink-0`}>
                                 <item.icon size={20} />
                             </div>
                             <div className="flex-1">
                                 <div className="flex justify-between items-start">
-                                    <h3 className="font-semibold text-slate-900">{item.title}</h3>
-                                    <span className="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-1 rounded-full flex items-center gap-1">
+                                    <h3 className="font-semibold text-slate-900 dark:text-slate-200">{item.title}</h3>
+                                    <span className="text-xs font-medium text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-full flex items-center gap-1">
                                         <Clock size={10} /> {item.time}
                                     </span>
                                 </div>
-                                <p className="text-sm text-slate-600 mt-1">{item.description}</p>
-                                <div className="mt-2 flex items-center gap-1 text-xs text-slate-400">
+                                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{item.description}</p>
+                                <div className="mt-2 flex items-center gap-1 text-xs text-slate-400 dark:text-slate-500">
                                     <Calendar size={12} />
                                     <span>{item.date}</span>
                                 </div>
@@ -100,7 +100,7 @@ const ActivityLogPage = () => {
             </div>
 
             <div className="text-center pt-4">
-                <p className="text-xs text-slate-400">Showing last 7 days of activity</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500">Showing last 7 days of activity</p>
             </div>
         </div>
     );

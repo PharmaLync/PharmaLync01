@@ -35,7 +35,7 @@ const DoctorProfilePage = () => {
 
     return (
         <div className="px-4 py-6 pb-24 space-y-6">
-            <h1 className="text-xl font-bold text-slate-900">My Profile</h1>
+            <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">My Profile</h1>
 
             {/* Profile Card */}
             <Card className="p-6 border-0 shadow-lg bg-gradient-to-br from-teal-700 to-teal-900 text-white relative overflow-hidden">
@@ -53,30 +53,30 @@ const DoctorProfilePage = () => {
             </Card>
 
             {/* Details */}
-            <Card className="p-0 border-0 shadow-sm overflow-hidden">
-                <div className="p-4 border-b border-slate-50 flex justify-between items-center hover:bg-slate-50 transition-colors">
+            <Card className="p-0 border-0 shadow-sm dark:shadow-none bg-white dark:bg-slate-900 overflow-hidden border border-slate-100 dark:border-slate-800">
+                <div className="p-4 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                     <div>
-                        <p className="text-xs text-slate-400 uppercase font-bold">License Number</p>
-                        <p className="text-slate-800 font-medium font-mono">WBMC-2023-8821</p>
+                        <p className="text-xs text-slate-400 dark:text-slate-500 uppercase font-bold">License Number</p>
+                        <p className="text-slate-800 dark:text-slate-200 font-medium font-mono">WBMC-2023-8821</p>
                     </div>
-                    <ShieldCheck className="text-teal-600" size={20} />
+                    <ShieldCheck className="text-teal-600 dark:text-teal-500" size={20} />
                 </div>
-                <div className="p-4 border-b border-slate-50 flex justify-between items-center hover:bg-slate-50 transition-colors">
+                <div className="p-4 border-b border-slate-50 dark:border-slate-800 flex justify-between items-center hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                     <div>
-                        <p className="text-xs text-slate-400 uppercase font-bold">Phone Number</p>
-                        <p className="text-slate-800 font-medium">+91 98765 43210</p>
-                    </div>
-                </div>
-                <div className="p-4 flex justify-between items-center hover:bg-slate-50 transition-colors">
-                    <div>
-                        <p className="text-xs text-slate-400 uppercase font-bold">Email</p>
-                        <p className="text-slate-800 font-medium">dr.sharma@apollo.com</p>
+                        <p className="text-xs text-slate-400 dark:text-slate-500 uppercase font-bold">Phone Number</p>
+                        <p className="text-slate-800 dark:text-slate-200 font-medium">+91 98765 43210</p>
                     </div>
                 </div>
-                <div className="p-4 flex justify-between items-center hover:bg-slate-50 transition-colors">
+                <div className="p-4 flex justify-between items-center hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
                     <div>
-                        <p className="text-xs text-slate-400 uppercase font-bold">Location</p>
-                        <p className="text-slate-800 font-medium">Salt Lake, Sector V, Kolkata</p>
+                        <p className="text-xs text-slate-400 dark:text-slate-500 uppercase font-bold">Email</p>
+                        <p className="text-slate-800 dark:text-slate-200 font-medium">dr.sharma@apollo.com</p>
+                    </div>
+                </div>
+                <div className="p-4 flex justify-between items-center hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <div>
+                        <p className="text-xs text-slate-400 dark:text-slate-500 uppercase font-bold">Location</p>
+                        <p className="text-slate-800 dark:text-slate-200 font-medium">Salt Lake, Sector V, Kolkata</p>
                     </div>
                 </div>
             </Card>
@@ -86,19 +86,19 @@ const DoctorProfilePage = () => {
                 <Button
                     onClick={() => setShowOtpModal(true)}
                     variant="outline"
-                    className="w-full h-12 justify-start px-4 text-slate-700 border-slate-200 hover:bg-slate-50"
+                    className="w-full h-12 justify-start px-4 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800"
                 >
-                    <PenTool className="mr-3 text-slate-500" size={18} /> Update Digital Signature
+                    <PenTool className="mr-3 text-slate-500 dark:text-slate-400" size={18} /> Update Digital Signature
                 </Button>
                 <Button
                     variant="outline"
-                    className="w-full h-12 justify-start px-4 text-slate-700 border-slate-200 hover:bg-slate-50"
+                    className="w-full h-12 justify-start px-4 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800"
                 >
-                    <Bell className="mr-3 text-slate-500" size={18} /> Notifications
+                    <Bell className="mr-3 text-slate-500 dark:text-slate-400" size={18} /> Notifications
                 </Button>
                 <Button
                     onClick={handleSignOut}
-                    className="w-full h-12 justify-start px-4 bg-red-50 text-red-600 hover:bg-red-100 border border-red-100 mt-4"
+                    className="w-full h-12 justify-start px-4 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/20 border border-red-100 dark:border-red-900/30 mt-4"
                 >
                     <LogOut className="mr-3" size={18} /> Sign Out
                 </Button>
@@ -112,12 +112,12 @@ const DoctorProfilePage = () => {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            className="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl"
+                            className="bg-white dark:bg-slate-900 w-full max-w-sm rounded-2xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800"
                         >
                             {signatureStep === 'verify' && (
                                 <>
-                                    <h3 className="text-lg font-bold text-slate-900 mb-2">Security Check</h3>
-                                    <p className="text-sm text-slate-500 mb-6">Enter the OTP sent to your mobile to update your digital signature.</p>
+                                    <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 mb-2">Security Check</h3>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Enter the OTP sent to your mobile to update your digital signature.</p>
 
                                     <input
                                         type="text"
@@ -125,12 +125,12 @@ const DoctorProfilePage = () => {
                                         value={otp}
                                         onChange={e => setOtp(e.target.value)}
                                         placeholder="Enter 6-digit OTP"
-                                        className="w-full p-3 rounded-xl border border-slate-200 text-center text-lg tracking-widest font-bold mb-6 focus:ring-2 focus:ring-teal-500/20 focus:outline-none"
+                                        className="w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-center text-lg tracking-widest font-bold mb-6 focus:ring-2 focus:ring-teal-500/20 focus:outline-none"
                                     />
 
                                     <div className="flex gap-3">
-                                        <Button variant="outline" className="flex-1" onClick={() => setShowOtpModal(false)}>Cancel</Button>
-                                        <Button className="flex-1 bg-teal-700 hover:bg-teal-800" onClick={handleVerifyOtp}>Verify</Button>
+                                        <Button variant="outline" className="flex-1 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800" onClick={() => setShowOtpModal(false)}>Cancel</Button>
+                                        <Button className="flex-1 bg-teal-700 hover:bg-teal-800 text-white" onClick={handleVerifyOtp}>Verify</Button>
                                     </div>
                                 </>
                             )}
@@ -138,19 +138,19 @@ const DoctorProfilePage = () => {
                             {signatureStep === 'upload' && (
                                 <>
                                     <div className="text-center mb-6">
-                                        <div className="w-16 h-16 bg-teal-50 text-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <div className="w-16 h-16 bg-teal-50 dark:bg-teal-900/30 text-teal-600 dark:text-teal-400 rounded-full flex items-center justify-center mx-auto mb-4">
                                             <Lock size={32} />
                                         </div>
-                                        <h3 className="text-lg font-bold text-slate-900">Access Granted</h3>
-                                        <p className="text-sm text-slate-500">Upload your new signature file.</p>
+                                        <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Access Granted</h3>
+                                        <p className="text-sm text-slate-500 dark:text-slate-400">Upload your new signature file.</p>
                                     </div>
 
-                                    <div className="border-2 border-dashed border-slate-200 rounded-xl p-8 text-center cursor-pointer hover:bg-slate-50 transition-colors">
-                                        <p className="text-sm text-slate-400">Click to browse or drop file here</p>
-                                        <p className="text-xs text-slate-300 mt-1">PNG, JPG (Max 2MB)</p>
+                                    <div className="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-xl p-8 text-center cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                                        <p className="text-sm text-slate-400 dark:text-slate-500">Click to browse or drop file here</p>
+                                        <p className="text-xs text-slate-300 dark:text-slate-600 mt-1">PNG, JPG (Max 2MB)</p>
                                     </div>
 
-                                    <Button className="w-full mt-6 bg-slate-900 text-white" onClick={handleUpload}>
+                                    <Button className="w-full mt-6 bg-slate-900 dark:bg-teal-600 text-white" onClick={handleUpload}>
                                         Save New Signature
                                     </Button>
                                 </>

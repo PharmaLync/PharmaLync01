@@ -258,18 +258,18 @@ const DispensePage = () => {
         if (!selectedPrescription) return null;
 
         return (
-            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
                 <motion.div
                     initial={{ scale: 0.9, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    className="bg-white rounded-2xl w-full max-w-md overflow-hidden max-h-[80vh] flex flex-col"
+                    className="bg-white dark:bg-slate-900 rounded-2xl w-full max-w-md overflow-hidden max-h-[80vh] flex flex-col border border-slate-200 dark:border-slate-800"
                 >
-                    <div className="bg-teal-600 p-4 text-white flex justify-between items-center">
+                    <div className="bg-teal-600 dark:bg-teal-700 p-4 text-white flex justify-between items-center">
                         <div>
                             <h3 className="font-bold">Prescription #{selectedPrescription.id}</h3>
                             <p className="text-xs opacity-80">Dr. {selectedPrescription.doctor}</p>
                         </div>
-                        <button onClick={() => setSelectedPrescription(null)}><X /></button>
+                        <button onClick={() => setSelectedPrescription(null)} className="hover:bg-white/20 p-1 rounded-full"><X /></button>
                     </div>
 
                     <div className="p-4 overflow-y-auto flex-1 space-y-4">
@@ -280,40 +280,40 @@ const DispensePage = () => {
                             const inCart = billItems.find(i => i.id === medRx.medicineId && i.prescriptionId === selectedPrescription.id);
                             const currentQty = inCart ? inCart.quantity : 0;
 
-                            if (isFullyDispensed) return null; // Don't show fully dispensed items? Or show as completed? Requirement says "Expired prescriptions must NOT appear". Assume filled meds in pending Rx should effectively be disabled or hidden. Let's hide them to keep it clean.
+                            if (isFullyDispensed) return null;
 
                             return (
-                                <div key={medRx.medicineId} className="border border-slate-200 rounded-xl p-3">
+                                <div key={medRx.medicineId} className="border border-slate-200 dark:border-slate-800 rounded-xl p-3 bg-slate-50 dark:bg-slate-800/20">
                                     <div className="flex justify-between items-start mb-2">
-                                        <h4 className="font-bold text-slate-800">{medRx.name}</h4>
-                                        <Badge variant={isFullyDispensed ? "secondary" : "outline"} className={isFullyDispensed ? "bg-slate-100" : "text-teal-700 bg-teal-50"}>
+                                        <h4 className="font-bold text-slate-800 dark:text-slate-200">{medRx.name}</h4>
+                                        <Badge variant={isFullyDispensed ? "secondary" : "outline"} className={isFullyDispensed ? "bg-slate-100 dark:bg-slate-800" : "text-teal-700 dark:text-teal-400 bg-teal-50 dark:bg-teal-900/30"}>
                                             {medInfo ? `₹${medInfo.price}` : 'N/A'}
                                         </Badge>
                                     </div>
-                                    <p className="text-xs text-slate-500 mb-3">{medRx.dosage} • {medRx.days} Days</p>
+                                    <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">{medRx.dosage} • {medRx.days} Days</p>
 
-                                    <div className="flex items-center justify-between bg-slate-50 p-2 rounded-lg">
-                                        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                    <div className="flex items-center justify-between bg-white dark:bg-slate-900 p-2 rounded-lg border border-slate-100 dark:border-slate-800">
+                                        <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                             Max: {remaining}
                                         </span>
 
                                         <div className="flex items-center gap-3">
                                             {currentQty > 0 ? (
                                                 <>
-                                                    <button onClick={() => updateQuantity(medRx.medicineId, currentQty - 1)} className="w-8 h-8 rounded-full bg-white border shadow-sm flex items-center justify-center text-slate-600"><Minus size={16} /></button>
-                                                    <span className="font-bold w-4 text-center">{currentQty}</span>
+                                                    <button onClick={() => updateQuantity(medRx.medicineId, currentQty - 1)} className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 border dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-600 dark:text-slate-300"><Minus size={16} /></button>
+                                                    <span className="font-bold w-4 text-center text-slate-900 dark:text-slate-100">{currentQty}</span>
                                                     <button
                                                         onClick={() => {
                                                             if (currentQty < remaining) updateQuantity(medRx.medicineId, currentQty + 1);
                                                         }}
                                                         disabled={currentQty >= remaining}
-                                                        className={`w-8 h-8 rounded-full flex items-center justify-center text-white shadow-sm ${currentQty >= remaining ? 'bg-slate-300' : 'bg-teal-600'}`}
+                                                        className={`w-8 h-8 rounded-full flex items-center justify-center text-white shadow-sm ${currentQty >= remaining ? 'bg-slate-300 dark:bg-slate-700' : 'bg-teal-600 dark:bg-teal-500'}`}
                                                     >
                                                         <Plus size={16} />
                                                     </button>
                                                 </>
                                             ) : (
-                                                <Button size="sm" onClick={() => addToBill(medInfo, 1, selectedPrescription.id, medRx)} disabled={!medInfo || medInfo.stock === 0} className="bg-teal-600 h-8 text-xs">
+                                                <Button size="sm" onClick={() => addToBill(medInfo, 1, selectedPrescription.id, medRx)} disabled={!medInfo || medInfo.stock === 0} className="bg-teal-600 dark:bg-teal-500 h-8 text-xs">
                                                     Add
                                                 </Button>
                                             )}
@@ -330,28 +330,28 @@ const DispensePage = () => {
 
     if (showConfirm) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-green-50 p-6 flex-col text-center">
-                <motion.div initial={{ scale: 0.5 }} animate={{ scale: 1 }} className="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
+            <div className="min-h-screen flex items-center justify-center bg-green-50 dark:bg-green-950/20 p-6 flex-col text-center">
+                <motion.div initial={{ scale: 0.5 }} animate={{ scale: 1 }} className="w-24 h-24 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mb-6">
                     <CheckCircle2 size={48} />
                 </motion.div>
-                <h2 className="text-2xl font-bold text-teal-900 mb-2">Dispense Complete</h2>
-                <p className="text-slate-600 mb-8">Stock updated and transaction recorded.</p>
-                <Button onClick={finishSession} size="lg" className="w-full bg-teal-700">Next Patient</Button>
+                <h2 className="text-2xl font-bold text-teal-900 dark:text-teal-400 mb-2">Dispense Complete</h2>
+                <p className="text-slate-600 dark:text-slate-400 mb-8">Stock updated and transaction recorded.</p>
+                <Button onClick={finishSession} size="lg" className="w-full bg-teal-700 dark:bg-teal-600 hover:bg-teal-800 dark:hover:bg-teal-500 text-white">Next Patient</Button>
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen pb-24 bg-slate-50">
+        <div className="min-h-screen pb-24 bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
             {/* Top Patient Bar */}
-            <div className="bg-white p-4 border-b border-slate-200 sticky top-0 z-10 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 p-4 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-10 shadow-sm">
                 <div className="flex justify-between items-center">
                     <div>
-                        <h2 className="font-bold text-slate-800">{currentPatient?.name || 'Walk-in Customer'}</h2>
-                        <p className="text-xs text-slate-500">{currentPatient ? `ID: ${currentPatient.id}` : 'General Sale'}</p>
+                        <h2 className="font-bold text-slate-800 dark:text-slate-100">{currentPatient?.name || 'Walk-in Customer'}</h2>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">{currentPatient ? `ID: ${currentPatient.id}` : 'General Sale'}</p>
                     </div>
                     {currentPatient && (
-                        <div className="w-10 h-10 bg-teal-100 text-teal-700 rounded-full flex items-center justify-center font-bold">
+                        <div className="w-10 h-10 bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 rounded-full flex items-center justify-center font-bold">
                             {currentPatient.age}
                         </div>
                     )}
@@ -364,10 +364,10 @@ const DispensePage = () => {
                 <div className="space-y-4">
                     {/* Mock Scanner */}
                     {/* Real Scanner for Medicines */}
-                    <div className="bg-slate-900 text-white rounded-2xl overflow-hidden shadow-lg relative min-h-[14rem]">
+                    <div className="bg-slate-900 dark:bg-black text-white rounded-2xl overflow-hidden shadow-lg relative min-h-[14rem] border border-slate-800 dark:border-slate-800">
                         {!isScanning ? (
                             <div
-                                className="flex flex-col items-center justify-center p-6 h-56 cursor-pointer hover:bg-slate-800 transition-colors"
+                                className="flex flex-col items-center justify-center p-6 h-56 cursor-pointer hover:bg-slate-800 dark:hover:bg-slate-900 transition-colors"
                                 onClick={startScanner}
                             >
                                 <ScanLine size={48} className="mb-4 text-teal-400" />
@@ -400,46 +400,46 @@ const DispensePage = () => {
                     </div>
 
                     {/* Current Dispense List (Cart) */}
-                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                        <div className="p-4 bg-slate-50 border-b border-slate-100 flex justify-between items-center">
-                            <h3 className="font-bold flex items-center gap-2 text-slate-700">
+                    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                        <div className="p-4 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                            <h3 className="font-bold flex items-center gap-2 text-slate-700 dark:text-slate-200">
                                 <ShoppingCart size={18} /> Dispensing
                             </h3>
-                            <span className="text-xs font-bold bg-teal-100 text-teal-700 px-2 py-1 rounded">
+                            <span className="text-xs font-bold bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 px-2 py-1 rounded">
                                 {billItems.length} Items
                             </span>
                         </div>
 
-                        <div className="divide-y divide-slate-100 max-h-[300px] overflow-y-auto">
+                        <div className="divide-y divide-slate-100 dark:divide-slate-800 max-h-[300px] overflow-y-auto">
                             {billItems.length === 0 ? (
-                                <div className="p-8 text-center text-slate-400 text-sm">
+                                <div className="p-8 text-center text-slate-400 dark:text-slate-500 text-sm">
                                     No medicines scanned yet.
                                 </div>
                             ) : (
                                 billItems.map(item => (
-                                    <div key={item.id} className="p-4 flex items-center justify-between">
+                                    <div key={item.id} className="p-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/20 transition-colors">
                                         <div>
-                                            <p className="font-bold text-slate-800 text-sm">{item.name}</p>
-                                            <p className="text-xs text-slate-500">
+                                            <p className="font-bold text-slate-800 dark:text-slate-200 text-sm">{item.name}</p>
+                                            <p className="text-xs text-slate-500 dark:text-slate-400">
                                                 {item.prescriptionId ? 'Rx Item' : 'OTC'} • ₹{item.price * item.quantity}
                                             </p>
                                         </div>
                                         <div className="flex items-center gap-3">
-                                            <button onClick={() => updateQuantity(item.id, item.prescriptionId, item.quantity - 1)} className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200"><Minus size={12} /></button>
-                                            <span className="font-mono font-bold text-sm w-4 text-center">{item.quantity}</span>
-                                            <button onClick={() => updateQuantity(item.id, item.prescriptionId, item.quantity + 1)} className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200"><Plus size={12} /></button>
+                                            <button onClick={() => updateQuantity(item.id, item.prescriptionId, item.quantity - 1)} className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"><Minus size={12} /></button>
+                                            <span className="font-mono font-bold text-sm w-4 text-center text-slate-900 dark:text-slate-100">{item.quantity}</span>
+                                            <button onClick={() => updateQuantity(item.id, item.prescriptionId, item.quantity + 1)} className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700"><Plus size={12} /></button>
                                         </div>
                                     </div>
                                 ))
                             )}
                         </div>
 
-                        <div className="p-4 bg-slate-50 border-t border-slate-100">
+                        <div className="p-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800">
                             <div className="flex justify-between items-center mb-4">
-                                <span className="text-slate-500">Total</span>
-                                <span className="text-xl font-bold text-slate-900">₹{totalAmount}</span>
+                                <span className="text-slate-500 dark:text-slate-400">Total</span>
+                                <span className="text-xl font-bold text-slate-900 dark:text-slate-100">₹{totalAmount}</span>
                             </div>
-                            <Button className="w-full bg-teal-700 hover:bg-teal-800 font-bold h-12" disabled={billItems.length === 0} onClick={handleCheckout}>
+                            <Button className="w-full bg-teal-700 hover:bg-teal-800 dark:hover:bg-teal-600 font-bold h-12 text-white" disabled={billItems.length === 0} onClick={handleCheckout}>
                                 Confirm Dispense
                             </Button>
                         </div>
@@ -448,10 +448,10 @@ const DispensePage = () => {
 
                 {/* Right Panel: Prescriptions */}
                 <div>
-                    <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-3 px-1">Prescriptions</h3>
+                    <h3 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3 px-1">Prescriptions</h3>
 
                     {!currentPatient ? (
-                        <div className="bg-orange-50 p-4 rounded-xl border border-orange-200 text-orange-700 text-sm">
+                        <div className="bg-orange-50 dark:bg-orange-900/10 p-4 rounded-xl border border-orange-200 dark:border-orange-900/30 text-orange-700 dark:text-orange-400 text-sm">
                             <AlertCircle size={16} className="inline mr-2" />
                             Use "Walk-in" mode for OTC. To see prescriptions, please scan Patient ID first.
                         </div>
@@ -463,21 +463,21 @@ const DispensePage = () => {
                                     <div
                                         key={rx.id}
                                         onClick={() => setSelectedPrescription(rx)}
-                                        className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:border-teal-300 hover:shadow-md transition-all cursor-pointer group"
+                                        className="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-teal-300 dark:hover:border-teal-700 hover:shadow-md transition-all cursor-pointer group"
                                     >
                                         <div className="flex justify-between items-start mb-2">
                                             <div>
-                                                <h4 className="font-bold text-slate-800 group-hover:text-teal-700">#{rx.id}</h4>
-                                                <p className="text-xs text-slate-500">{rx.date} • Dr. {rx.doctor}</p>
+                                                <h4 className="font-bold text-slate-800 dark:text-slate-200 group-hover:text-teal-700 dark:group-hover:text-teal-400">#{rx.id}</h4>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400">{rx.date} • Dr. {rx.doctor}</p>
                                             </div>
-                                            <ChevronRight className="text-slate-300 group-hover:text-teal-500" />
+                                            <ChevronRight className="text-slate-300 dark:text-slate-600 group-hover:text-teal-500" />
                                         </div>
                                         <div className="flex flex-wrap gap-2 mt-3">
                                             {rx.medicines.map((m, i) => {
                                                 const remaining = m.maxQty - m.dispensed;
                                                 if (remaining <= 0) return null;
                                                 return (
-                                                    <Badge key={i} variant="secondary" className="bg-slate-100 text-slate-600 font-normal">
+                                                    <Badge key={i} variant="secondary" className="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-normal">
                                                         {m.name} ({remaining})
                                                     </Badge>
                                                 )
@@ -486,7 +486,7 @@ const DispensePage = () => {
                                     </div>
                                 ))}
                             {currentPatient.prescriptions.every(rx => rx.status === 'completed') && (
-                                <p className="text-center text-slate-400 py-8 text-sm">
+                                <p className="text-center text-slate-400 dark:text-slate-500 py-8 text-sm">
                                     No pending prescriptions.
                                 </p>
                             )}

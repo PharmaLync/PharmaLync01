@@ -58,8 +58,8 @@ const DraftPrescriptionPage = () => {
     return (
         <PageTransition className="px-4 py-6 pb-32 space-y-6">
             <div>
-                <p className="text-sm font-bold text-slate-400 uppercase">Step 2 of 2</p>
-                <h1 className="text-2xl font-bold text-slate-900">Draft Prescription</h1>
+                <p className="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase">Step 2 of 2</p>
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Draft Prescription</h1>
             </div>
 
             {/* Medicine Selector */}
@@ -70,24 +70,24 @@ const DraftPrescriptionPage = () => {
                         placeholder="Search Medicines (e.g. Dolo)"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                     />
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" size={18} />
                 </div>
 
                 {/* Search Results Dropdown */}
                 {searchQuery && (
-                    <div className="absolute top-full left-0 w-full bg-white border border-slate-100 shadow-xl rounded-xl mt-2 overflow-hidden max-h-48 overflow-y-auto">
+                    <div className="absolute top-full left-0 w-full bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-xl rounded-xl mt-2 overflow-hidden max-h-48 overflow-y-auto">
                         {medicinesMock
                             .filter(m => m.name.toLowerCase().includes(searchQuery.toLowerCase()))
                             .map(med => (
                                 <div
                                     key={med.id}
                                     onClick={() => addMed(med)}
-                                    className="p-3 hover:bg-slate-50 cursor-pointer flex justify-between items-center border-b border-slate-50 last:border-0"
+                                    className="p-3 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer flex justify-between items-center border-b border-slate-50 dark:border-slate-800 last:border-0"
                                 >
-                                    <span className="font-medium text-slate-800">{med.name}</span>
-                                    <span className="text-xs text-slate-400">{med.type}</span>
+                                    <span className="font-medium text-slate-800 dark:text-slate-200">{med.name}</span>
+                                    <span className="text-xs text-slate-400 dark:text-slate-500">{med.type}</span>
                                 </div>
                             ))
                         }
@@ -98,43 +98,43 @@ const DraftPrescriptionPage = () => {
             {/* Added Medicines List */}
             <div className="space-y-4">
                 {selectedMeds.map((med, idx) => (
-                    <Card key={idx} className="p-4 border border-slate-200 shadow-sm relative group">
+                    <Card key={idx} className="p-4 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm dark:shadow-none relative group">
                         <div className="flex justify-between items-start mb-4">
-                            <h3 className="font-bold text-slate-800 flex items-center gap-2">
-                                <span className="w-6 h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-xs">{idx + 1}</span>
+                            <h3 className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                                <span className="w-6 h-6 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xs">{idx + 1}</span>
                                 {med.name}
                             </h3>
-                            <button onClick={() => removeMed(idx)} className="text-red-400 hover:text-red-600 p-1">
+                            <button onClick={() => removeMed(idx)} className="text-red-400 hover:text-red-600 dark:hover:text-red-300 p-1">
                                 <Trash2 size={16} />
                             </button>
                         </div>
 
                         <div className="grid grid-cols-2 gap-3">
                             <div className="space-y-1">
-                                <label className="text-[10px] uppercase font-bold text-slate-400">Dosage</label>
+                                <label className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500">Dosage</label>
                                 <input
                                     type="text"
                                     value={med.dosage}
                                     onChange={(e) => updateMed(idx, 'dosage', e.target.value)}
-                                    className="w-full p-2 bg-slate-50 rounded-lg text-sm font-medium border-transparent focus:bg-white focus:border-blue-200 border transition-all"
+                                    className="w-full p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-sm font-medium text-slate-900 dark:text-slate-200 border-transparent focus:bg-white dark:focus:bg-slate-900 focus:border-blue-200 dark:focus:border-blue-800 border transition-all"
                                 />
                             </div>
                             <div className="space-y-1">
-                                <label className="text-[10px] uppercase font-bold text-slate-400">Duration</label>
+                                <label className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500">Duration</label>
                                 <input
                                     type="text"
                                     value={med.validity}
                                     onChange={(e) => updateMed(idx, 'validity', e.target.value)}
-                                    className="w-full p-2 bg-slate-50 rounded-lg text-sm font-medium border-transparent focus:bg-white focus:border-blue-200 border transition-all"
+                                    className="w-full p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-sm font-medium text-slate-900 dark:text-slate-200 border-transparent focus:bg-white dark:focus:bg-slate-900 focus:border-blue-200 dark:focus:border-blue-800 border transition-all"
                                 />
                             </div>
                             <div className="space-y-1 col-span-2">
-                                <label className="text-[10px] uppercase font-bold text-slate-400">Total Qty</label>
+                                <label className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500">Total Qty</label>
                                 <input
                                     type="number"
                                     value={med.qty}
                                     onChange={(e) => updateMed(idx, 'qty', e.target.value)}
-                                    className="w-full p-2 bg-slate-50 rounded-lg text-sm font-medium border-transparent focus:bg-white focus:border-blue-200 border transition-all"
+                                    className="w-full p-2 bg-slate-50 dark:bg-slate-800 rounded-lg text-sm font-medium text-slate-900 dark:text-slate-200 border-transparent focus:bg-white dark:focus:bg-slate-900 focus:border-blue-200 dark:focus:border-blue-800 border transition-all"
                                 />
                             </div>
                         </div>
@@ -142,28 +142,28 @@ const DraftPrescriptionPage = () => {
                 ))}
 
                 {selectedMeds.length === 0 && (
-                    <div className="text-center py-10 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
-                        <Pill className="mx-auto text-slate-300 mb-2" size={32} />
-                        <p className="text-slate-400 font-medium text-sm">No medicines added yet.</p>
+                    <div className="text-center py-10 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800">
+                        <Pill className="mx-auto text-slate-300 dark:text-slate-600 mb-2" size={32} />
+                        <p className="text-slate-400 dark:text-slate-500 font-medium text-sm">No medicines added yet.</p>
                     </div>
                 )}
             </div>
 
             {/* Digital Signature Block */}
-            <div className="mt-8 border-t border-slate-100 pt-6 flex justify-end">
+            <div className="mt-8 border-t border-slate-100 dark:border-slate-800 pt-6 flex justify-end">
                 <div className="text-right">
-                    <div className="w-40 h-16 bg-white border border-slate-200 rounded-lg flex items-center justify-center mb-2 overflow-hidden relative">
-                        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-                        <p className="font-handwriting text-xl text-blue-900 -rotate-6">Dr. Sharma</p>
+                    <div className="w-40 h-16 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg flex items-center justify-center mb-2 overflow-hidden relative">
+                        <div className="absolute inset-0 opacity-10 dark:opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-invert"></div>
+                        <p className="font-handwriting text-xl text-blue-900 dark:text-blue-300 -rotate-6">Dr. Sharma</p>
                     </div>
-                    <div className="flex items-center justify-end gap-1 text-xs text-green-600 font-bold uppercase tracking-wider">
+                    <div className="flex items-center justify-end gap-1 text-xs text-green-600 dark:text-green-400 font-bold uppercase tracking-wider">
                         <CheckCircle size={12} /> Digitally Signed
                     </div>
-                    <p className="text-[10px] text-slate-400 mt-1">Reg: WBMC-2023-8821</p>
+                    <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-1">Reg: WBMC-2023-8821</p>
                 </div>
             </div>
 
-            <div className="fixed bottom-20 left-0 w-full px-6 py-4 bg-white/80 backdrop-blur-md border-t border-slate-200 shadow-lg-up">
+            <div className="fixed bottom-20 left-0 w-full px-6 py-4 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 shadow-lg-up">
                 <Button
                     onClick={handleIssue}
                     className="w-full max-w-md mx-auto h-12 bg-teal-700 hover:bg-teal-800 text-white rounded-xl shadow-lg shadow-teal-700/20"

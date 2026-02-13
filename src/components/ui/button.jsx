@@ -9,9 +9,9 @@ const buttonVariants = cva(
             variant: {
                 default: "bg-teal-700 text-white shadow hover:bg-teal-800",
                 destructive: "bg-medical-red text-white shadow-sm hover:bg-red-600",
-                outline: "border border-teal-700 bg-transparent shadow-sm hover:bg-teal-50 text-teal-700",
-                secondary: "bg-teal-100 text-teal-900 shadow-sm hover:bg-teal-200",
-                ghost: "hover:bg-slate-100 hover:text-slate-900",
+                outline: "border border-teal-700 bg-transparent shadow-sm hover:bg-teal-50 text-teal-700 dark:border-teal-500 dark:text-teal-400 dark:hover:bg-slate-800",
+                secondary: "bg-teal-100 text-teal-900 shadow-sm hover:bg-teal-200 dark:bg-teal-900/40 dark:text-teal-100 dark:hover:bg-teal-900/60",
+                ghost: "hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-100",
                 link: "text-teal-700 underline-offset-4 hover:underline",
                 glass: "bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-white/30 shadow-sm",
             },

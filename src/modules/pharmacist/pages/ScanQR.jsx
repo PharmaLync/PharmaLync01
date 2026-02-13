@@ -120,25 +120,25 @@ const ScanQR = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className="flex flex-col items-center"
                     >
-                        <div className={`bg-slate-100 p-8 rounded-full mb-8 ${isLoading ? 'animate-spin' : 'animate-pulse'}`}>
-                            <QrCode size={64} className="text-teal-600" />
+                        <div className={`bg-slate-100 dark:bg-slate-800 p-8 rounded-full mb-8 ${isLoading ? 'animate-spin' : 'animate-pulse'}`}>
+                            <QrCode size={64} className="text-teal-600 dark:text-teal-400" />
                         </div>
-                        <h2 className="text-2xl font-bold text-slate-800 mb-2">
+                        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">
                             {isLoading ? 'Verifying...' : 'Ready to Scan'}
                         </h2>
-                        <p className="text-slate-500 mb-8 max-w-xs">
+                        <p className="text-slate-500 dark:text-slate-400 mb-8 max-w-xs">
                             Scan a patient's digital health card or prescription QR code to proceed.
                         </p>
 
                         {errorMsg && (
-                            <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100">
+                            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 rounded-xl text-sm border border-red-100 dark:border-red-900/30">
                                 {errorMsg}
                             </div>
                         )}
 
                         <Button
                             size="lg"
-                            className="w-full max-w-xs h-14 text-lg bg-teal-600 hover:bg-teal-700 rounded-2xl shadow-lg"
+                            className="w-full max-w-xs h-14 text-lg bg-teal-600 hover:bg-teal-700 text-white rounded-2xl shadow-lg dark:shadow-teal-900/20"
                             onClick={startScanner}
                             disabled={isLoading}
                         >
