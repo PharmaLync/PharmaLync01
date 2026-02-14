@@ -4,10 +4,12 @@ import { Button } from '@/components/ui/button';
 import { LogOut, Bell, ShieldCheck, PenTool, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import DoctorNotificationsModal from '../components/DoctorNotificationsModal';
 
 const DoctorProfilePage = () => {
     const navigate = useNavigate();
     const [showOtpModal, setShowOtpModal] = useState(false);
+    const [showNotifications, setShowNotifications] = useState(false);
     const [otp, setOtp] = useState('');
     const [signatureStep, setSignatureStep] = useState('verify'); // verify | upload | success
 
@@ -91,6 +93,7 @@ const DoctorProfilePage = () => {
                     <PenTool className="mr-3 text-slate-500 dark:text-slate-400" size={18} /> Update Digital Signature
                 </Button>
                 <Button
+                    onClick={() => setShowNotifications(true)}
                     variant="outline"
                     className="w-full h-12 justify-start px-4 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800"
                 >
@@ -157,6 +160,15 @@ const DoctorProfilePage = () => {
                             )}
                         </motion.div>
                     </div>
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {showNotifications && (
+                    <DoctorNotificationsModal
+                        isOpen={showNotifications}
+                        onClose={() => setShowNotifications(false)}
+                    />
                 )}
             </AnimatePresence>
         </div>

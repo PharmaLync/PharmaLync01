@@ -4,6 +4,7 @@ import { User, ShieldCheck, X, Clock, AlertTriangle, CheckCircle2, History, Moon
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { useTheme } from '@/context/ThemeContext';
+import { useAuthStore } from '@/lib/authStore';
 
 import Logo from '@/components/ui/Logo';
 import MedicalHistoryModal from './components/MedicalHistoryModal';
@@ -108,12 +109,20 @@ const ConsentLogsModal = ({ isOpen, onClose }) => {
     );
 };
 
+import { useNavigate } from 'react-router-dom';
+
 const ProfileHeader = () => {
     const [showMenu, setShowMenu] = useState(false);
     const [showConsentLogs, setShowConsentLogs] = useState(false);
     const [showMedicalHistory, setShowMedicalHistory] = useState(false);
+    const navigate = useNavigate();
+    const { user } = useAuthStore();
 
     const { theme, toggleTheme } = useTheme();
+
+    const handleSignOut = () => {
+        navigate('/login');
+    };
 
     return (
         <>
@@ -152,7 +161,7 @@ const ProfileHeader = () => {
                             className="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden border-2 border-white dark:border-slate-800 shadow-sm ring-1 ring-teal-100 dark:ring-teal-900 transition-transform active:scale-95 focus:outline-none focus:ring-2 focus:ring-teal-400"
                         >
                             <img
-                                src="https://api.dicebear.com/7.x/avataaars/svg?seed=Harish"
+                                src={user?.profilePicture || "https://api.dicebear.com/7.x/avataaars/svg?seed=Harish"}
                                 alt="Profile"
                                 className="h-full w-full object-cover"
                             />
@@ -214,8 +223,11 @@ const ProfileHeader = () => {
 
                                         <div className="h-px bg-slate-100 dark:bg-slate-800 my-1" />
 
-                                        {/* Sign Out (Placeholder) */}
-                                        <button className="w-full text-left px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-3">
+                                        {/* Sign Out */}
+                                        <button
+                                            onClick={handleSignOut}
+                                            className="w-full text-left px-4 py-3 text-sm font-medium text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center gap-3"
+                                        >
                                             <LogOut size={16} />
                                             Sign Out
                                         </button>

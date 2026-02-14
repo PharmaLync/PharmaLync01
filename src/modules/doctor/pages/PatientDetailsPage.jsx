@@ -6,10 +6,13 @@ import { Card } from '@/components/ui/card';
 import { User, Droplets, AlertCircle, FileText, ChevronRight, Stethoscope, Clock, ShieldCheck, ChevronDown, CheckCircle2 } from 'lucide-react';
 import PageTransition from '@/components/ui/PageTransition';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { AnimatePresence } from 'framer-motion';
+import PatientHistoryModal from '../components/PatientHistoryModal';
 
 const PatientDetailsPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [showHistoryModal, setShowHistoryModal] = useState(false);
 
     // Mock Patient Data - AUTHENTIC STRUCTURE
     const patient = {
@@ -20,6 +23,8 @@ const PatientDetailsPage = () => {
         id: "P-12345",
         lastVisit: "2 days ago",
         // img: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=200&h=200",
+        // Using Dicebear for consistency
+        img: `https://api.dicebear.com/7.x/avataaars/svg?seed=Harish`,
 
         // Medical Summary
         summary: {
@@ -128,11 +133,18 @@ const PatientDetailsPage = () => {
             <div>
                 <div className="flex items-center justify-between mb-4 mt-2">
                     <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">Patient History</h3>
-                    <Button variant="ghost" size="sm" className="text-blue-600 dark:text-blue-400 text-xs">View All</Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-blue-600 dark:text-blue-400 text-xs"
+                        onClick={() => setShowHistoryModal(true)}
+                    >
+                        View All
+                    </Button>
                 </div>
 
                 <div className="space-y-4">
-                    {patient.history.map(record => (
+                    {patient.history.slice(0, 2).map(record => ( // Show only first 2 records in summary view
                         <Card key={record.id} className="p-4 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm">
                             <div className="flex justify-between items-start mb-3">
                                 <div>
@@ -166,6 +178,16 @@ const PatientDetailsPage = () => {
                     ))}
                 </div>
             </div>
+
+            <AnimatePresence>
+                {showHistoryModal && (
+                    <PatientHistoryModal
+                        isOpen={showHistoryModal}
+                        onClose={() => setShowHistoryModal(false)}
+                        history={patient.history}
+                    />
+                )}
+            </AnimatePresence>
 
         </PageTransition>
     );
